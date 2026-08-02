@@ -38,14 +38,14 @@ const SISALTO = {
   },
 
   // ---------- PELAAJAT ----------
-  // lippu: "fi" (Suomi), "de" (Saksa), "se" (Ruotsi)
+  // lippu: "fi" (Suomi), "de" (Saksa), "se" (Ruotsi), "ca" (Kanada), "us" (USA), "au" (Australia), "es" (Espanja), "ru" (Venäjä), "by" (Valko-Venäjä)
   // kuva: kuvatiedoston nimi tai null (piirretty oletushahmo)
   pelaajat: {
     otsikko: "FEATURED PLAYERS",
     linkkiTeksti: "VIEW ALL ›",
     linkki: "#team",
     lista: [
-      { numero: 22, nimi: "Wyatt Brooks", pelipaikka: "F", maa: "USA", lippu: "fi", kuva: null }
+      { numero: 22, nimi: "Wyatt Brooks", pelipaikka: "F", maa: "USA", lippu: "us", kuva: null }
     ]
   },
 
