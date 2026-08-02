@@ -39,7 +39,7 @@ body{
 .metal{
   position:relative;border-radius:0;
   border:20px solid transparent;
-  border-image:url("metallinen_futuristinen_kehys_valkoisella_taustall JANNE.png") 52 / 20px stretch;
+  border-image:url("ui-frame.png") 52 / 20px stretch;
   background:linear-gradient(180deg,rgba(10,24,52,.92),rgba(7,16,36,.96));
   background-clip:padding-box;
   box-shadow:0 10px 30px rgba(0,0,0,.55);
@@ -56,22 +56,25 @@ body{
 header{padding:26px 0 8px;position:relative;z-index:5}
 .header-row{display:flex;align-items:flex-start;gap:34px}
 .logo-badge{flex:0 0 auto;margin-left:6px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.6))}
+/* logo on läpinäkyvällä taustalla (vaihdettu 1.8.2026) — ei enää valkoista laattaa.
+   Koko ja sijainti tulevat sisalto.js:n logo-osiosta CSS-muuttujina. */
 .logo-badge img{
-  width:158px;height:auto;display:block;
-  background:#fff;border-radius:16px;padding:10px 12px;
-  box-shadow:0 10px 26px rgba(0,0,0,.55), 0 0 0 2px rgba(200,215,235,.55);
+  width:var(--logo-w,170px);height:auto;display:block;
+  transform:translate(var(--logo-x,0px),var(--logo-y,0px));
+  filter:drop-shadow(0 6px 14px rgba(0,0,0,.6));
 }
 .foot-logo{
-  width:78px;height:auto;display:block;
-  background:#fff;border-radius:10px;padding:6px 7px;
-  box-shadow:0 6px 16px rgba(0,0,0,.5);
+  width:var(--logo-fw,86px);height:auto;display:block;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.55));
 }
+/* Navipalkki border-imagena: kromipäädyt piirretään omista viipaleistaan (181 px
+   lähdekuvassa), jolloin ne eivät litisty kun keskiosa venytetään koko leveydelle. */
 nav.mainnav{
   flex:1;margin-top:14px;height:68px;border-radius:10px;
-  background:url("kiiltävä_sininen_kromipalkki JANNE.png") no-repeat;
-  background-size:100% 100%;
+  border:solid transparent;border-width:0 51px;
+  border-image:url("ui-navbar.png") 0 181 fill stretch;
   box-shadow:0 12px 28px rgba(0,0,0,.55);
-  display:flex;align-items:stretch;justify-content:space-around;padding:0 48px;
+  display:flex;align-items:stretch;justify-content:space-around;padding:0;
 }
 nav.mainnav a{
   display:flex;align-items:center;position:relative;
@@ -94,7 +97,7 @@ nav.mainnav a.active::after{
 /* ================= HERO (koko sivun levyinen tausta) ================= */
 .topbg{
   position:relative;
-  background:url("ChatGPT Image 1.8.2026 klo 11.28.57.png") center top/cover no-repeat;
+  background:url("hero-bg.jpg") center top/cover no-repeat;
 }
 .topbg::before{
   content:"";position:absolute;inset:0;pointer-events:none;
@@ -118,7 +121,7 @@ nav.mainnav a.active::after{
 .cta{
   display:flex;align-items:center;gap:16px;min-width:310px;
   padding:20px 34px 20px 26px;border-radius:16px;cursor:pointer;text-decoration:none;
-  background:url("futuristinen_sininen_kehys JANNE.png") no-repeat;
+  background:url("ui-cta-button.png") no-repeat;
   background-size:100% 100%;
   filter:drop-shadow(0 10px 22px rgba(0,0,0,.55));
   transition:transform .15s ease, filter .15s ease;
@@ -135,14 +138,19 @@ nav.mainnav a.active::after{
 .cta .txt strong{display:block;font-size:22px;font-weight:800;letter-spacing:.06em;color:#fff}
 
 /* ================= INFO STRIP ================= */
+/* Infopalkki border-imagena (9-viipalointi): kulmaviisteet ja kromikiskot piirretään
+   omista viipaleistaan (slice 78/150), joten ne pysyvät oikean paksuisina myös
+   puhelimen korkeassa näkymässä. Vain sininen keskiosa venytetään. */
 .strip{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  margin:6px 0 26px;padding:26px 34px;border-radius:18px;
-  background:url("sininen_futuristinen_käyttöliittymäpaneeli JANNE.png") no-repeat;
-  background-size:100% 100%;
+  display:grid;grid-template-columns:1fr 1fr 1fr 1.12fr;
+  margin:6px 0 26px;padding:30px 34px 38px;border-radius:18px;
+  border:0 solid transparent;
+  border-image:url("ui-infobar.png") 78 150 fill / 50px 98px stretch;
   filter:drop-shadow(0 12px 28px rgba(0,0,0,.55));
 }
 .strip .cell{display:flex;gap:18px;align-items:center;padding:4px 26px;position:relative}
+/* uuden infopalkkigrafiikan oikean alakulman viiste — viimeinen solu tarvitsee lisää tilaa */
+.strip .cell:last-child{padding-right:62px}
 .strip .cell + .cell::before{
   content:"";position:absolute;left:0;top:12%;bottom:12%;width:1px;
   background:linear-gradient(180deg,transparent,rgba(180,200,225,.35),transparent);
@@ -165,20 +173,21 @@ nav.mainnav a.active::after{
 .strip .big{font-family:'Saira Condensed',sans-serif;font-size:34px;font-weight:800;color:#fff;line-height:1;margin:2px 0;text-shadow:0 0 16px rgba(63,140,255,.5)}
 
 /* ================= PANELS ================= */
-.panels{display:grid;grid-template-columns:1fr 1.02fr 1fr;gap:24px;margin-bottom:34px}
+.panels{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1.25fr) minmax(0,1fr);gap:24px;margin-bottom:34px}
 .panel{border-radius:18px;padding:20px 20px 22px}
 .panel-head{
-  display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;
-  padding:12px 24px;
-  background:url("kiiltävä_sininen_sci_fi_paneeli JANNE.png") no-repeat;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;
+  padding:12px 40px 12px 22px;
+  background:url("ui-panel-header.png") no-repeat;
   background-size:100% 100%;
 }
 .panel-head h3{
-  font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:21px;letter-spacing:.12em;color:#fff;
+  font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:19px;letter-spacing:.08em;color:#fff;
+  white-space:nowrap;
 }
 .panel-head a{
-  color:var(--blue-bright);text-decoration:none;font-weight:700;font-size:13.5px;letter-spacing:.08em;
-  font-family:'Saira Condensed',sans-serif;
+  color:var(--blue-bright);text-decoration:none;font-weight:700;font-size:12px;letter-spacing:.05em;
+  font-family:'Saira Condensed',sans-serif;white-space:nowrap;
 }
 .panel-head a:hover{text-shadow:0 0 12px var(--blue-glow)}
 
@@ -201,11 +210,12 @@ nav.mainnav a.active::after{
 .pcard img.photo{object-fit:cover}
 .pcard .info{padding:10px 8px 12px;text-align:center;background:linear-gradient(180deg,rgba(10,24,52,.6),rgba(6,12,26,.9))}
 .pcard .info .name{
-  font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:16.5px;letter-spacing:.08em;color:#fff;text-transform:uppercase;
+  font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:0;color:#fff;text-transform:uppercase;
+  line-height:1.15;overflow-wrap:anywhere;
 }
 .pcard .info .pos{
-  margin-top:4px;font-size:12.5px;font-weight:700;letter-spacing:.1em;color:var(--muted);
-  display:flex;align-items:center;justify-content:center;gap:7px;text-transform:uppercase;
+  margin-top:4px;font-size:11.5px;font-weight:700;letter-spacing:.05em;color:var(--muted);
+  display:flex;align-items:center;justify-content:center;gap:6px;text-transform:uppercase;flex-wrap:wrap;
 }
 .flag{width:22px;height:14px;border-radius:2px;display:inline-block;box-shadow:0 0 0 1px rgba(255,255,255,.25),0 2px 4px rgba(0,0,0,.5)}
 .flag.fi{background:linear-gradient(180deg,#fff 32%,#003580 32%,#003580 62%,#fff 62%),#fff;position:relative}
@@ -221,16 +231,16 @@ nav.mainnav a.active::after{
 /* schedule */
 .sched{display:flex;flex-direction:column;gap:8px}
 .srow{
-  display:grid;grid-template-columns:58px 30px 1fr 86px 130px;align-items:center;gap:10px;
-  background:url("sininen_futuristinen_käyttöliittymäpalkki JANNE.png") no-repeat;
+  display:grid;grid-template-columns:52px 26px minmax(0,1fr) 62px 84px;align-items:center;gap:8px;
+  background:url("ui-row.png") no-repeat;
   background-size:100% 100%;
-  border-radius:10px;padding:13px 26px;
+  border-radius:10px;padding:13px 18px;
 }
 .srow:hover{filter:brightness(1.18) drop-shadow(0 0 10px rgba(63,140,255,.35))}
 .srow .d{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;color:#cfe0f5}
-.srow .opp{font-weight:700;font-size:14px;letter-spacing:.05em;color:#fff;text-transform:uppercase}
+.srow .opp{font-weight:700;font-size:13px;letter-spacing:.03em;color:#fff;text-transform:uppercase;line-height:1.2;overflow-wrap:anywhere}
 .srow .t{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:14.5px;color:var(--blue-bright);letter-spacing:.05em}
-.srow .a{font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;text-align:right}
+.srow .a{font-size:10.5px;font-weight:600;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;text-align:right;line-height:1.25}
 .badge{
   width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:10.5px;color:#fff;
@@ -241,12 +251,13 @@ nav.mainnav a.active::after{
 table.stand{width:100%;border-collapse:separate;border-spacing:0 7px}
 table.stand th{
   font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.12em;
-  color:var(--muted);text-transform:uppercase;text-align:left;padding:2px 10px 4px;
+  color:var(--muted);text-transform:uppercase;text-align:left;padding:2px 6px 4px;
 }
-table.stand th.c, table.stand td.c{text-align:center}
+table.stand th.c, table.stand td.c{text-align:center;width:34px}
+table.stand th:first-child, table.stand td:first-child{width:26px;text-align:center}
 table.stand td{
   background:linear-gradient(180deg,rgba(18,42,88,.5),rgba(9,20,44,.7));
-  padding:11px 10px;font-weight:600;font-size:14px;color:#dbe6f3;
+  padding:11px 6px;font-weight:600;font-size:13.5px;color:#dbe6f3;
   border-top:1px solid rgba(130,160,200,.16);border-bottom:1px solid rgba(130,160,200,.16);
 }
 table.stand td:first-child{border-left:1px solid rgba(130,160,200,.16);border-radius:10px 0 0 10px}
@@ -255,7 +266,67 @@ table.stand tr.me td{
   background:linear-gradient(90deg,#1d5fd8,#123c9a);color:#fff;
   border-color:rgba(120,170,255,.7);box-shadow:0 0 18px rgba(63,140,255,.35);
 }
-table.stand td .team{display:flex;align-items:center;gap:9px;text-transform:uppercase;font-family:'Saira Condensed',sans-serif;font-weight:700;letter-spacing:.06em;font-size:14.5px}
+table.stand td .team{display:flex;align-items:center;gap:8px;text-transform:uppercase;font-family:'Saira Condensed',sans-serif;font-weight:700;letter-spacing:.03em;font-size:13.5px}
+
+/* ================= LATEST VIDEO ================= */
+.videoalue{margin-bottom:34px}
+.videoalue .panel-head{padding:12px 9% 12px 26px}
+.videowrap{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:26px;align-items:center}
+.videoruutu{
+  position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;cursor:pointer;
+  border:1.5px solid transparent;
+  background:
+    linear-gradient(180deg,#0f2148,#081226) padding-box,
+    linear-gradient(160deg,#9fb0c5,#3a4a63,#c6d1de) border-box;
+  box-shadow:0 10px 26px rgba(0,0,0,.55);
+}
+.videoruutu img{width:100%;height:100%;object-fit:cover;display:block}
+.videoruutu iframe{width:100%;height:100%;border:0;display:block}
+.videoruutu::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(4,10,25,.05),rgba(4,10,25,.55));
+  transition:opacity .18s ease;
+}
+.videoruutu.soi::after{display:none}
+.videoruutu .toista{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:84px;height:84px;border-radius:50%;z-index:3;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid transparent;
+  background:
+    radial-gradient(circle at 35% 30%,#1d5fd8,#0b1e46) padding-box,
+    var(--metal) border-box;
+  box-shadow:0 0 26px rgba(63,140,255,.55), inset 0 1px 0 rgba(255,255,255,.25);
+  transition:transform .16s ease, box-shadow .16s ease;
+}
+.videoruutu .toista span{
+  font-size:28px;color:#fff;margin-left:5px;text-shadow:0 0 12px rgba(63,140,255,.8);
+}
+.videoruutu:hover .toista{transform:translate(-50%,-50%) scale(1.08);box-shadow:0 0 34px rgba(63,140,255,.75)}
+.videoruutu .kesto{
+  position:absolute;right:10px;bottom:10px;z-index:3;
+  background:rgba(4,10,25,.85);border:1px solid rgba(140,170,210,.35);
+  border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700;letter-spacing:.06em;color:#dbe6f3;
+}
+.videoteksti h4{
+  font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:22px;line-height:1.15;
+  letter-spacing:.03em;color:#fff;text-transform:uppercase;margin-bottom:12px;
+}
+.videoteksti p{font-size:14.5px;line-height:1.6;color:var(--muted);font-weight:500;margin-bottom:18px}
+.videonappi{
+  display:inline-flex;align-items:center;gap:11px;text-decoration:none;
+  padding:12px 20px;border-radius:10px;
+  background:url("ui-cta-button.png") no-repeat;background-size:100% 100%;
+  font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:15px;
+  letter-spacing:.1em;color:#fff;
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.5));
+  transition:transform .15s ease, filter .15s ease;
+}
+.videonappi:hover{transform:translateY(-2px);filter:drop-shadow(0 12px 24px rgba(0,0,0,.55)) drop-shadow(0 0 16px rgba(63,140,255,.45))}
+.videonappi .ytmerkki{
+  width:26px;height:26px;flex:0 0 auto;border-radius:6px;background:#ff0033;
+  display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;
+}
 
 /* ================= FOOTER ================= */
 footer{
@@ -282,13 +353,40 @@ footer{
 .socials a:hover{border-color:var(--blue-bright);color:#fff;box-shadow:0 0 16px rgba(63,140,255,.4)}
 
 @media(max-width:1200px){
-  .panels{grid-template-columns:1fr}
+  .panels{grid-template-columns:minmax(0,1fr)}
   .strip{grid-template-columns:repeat(2,1fr);gap:18px 0}
   .strip .cell:nth-child(3)::before{display:none}
   .hero{padding:40px 26px 50px;min-height:520px}
   .header-row{flex-direction:column;align-items:center}
   nav.mainnav{width:100%;justify-content:center;flex-wrap:wrap;height:auto;padding:8px}
   nav.mainnav a{padding:10px 18px}
+}
+
+@media(max-width:760px){
+  .wrap{width:min(1560px,94vw)}
+  .strip{grid-template-columns:1fr;gap:22px 0;padding:26px 40px 34px}
+  .strip .cell{padding:4px 0;gap:14px}
+  .strip .cell:last-child{padding-right:0}
+  .strip .cell + .cell::before{display:none}
+  .strip .icon{width:52px;height:52px}
+  .panel{padding:16px 14px 18px}
+  .panel-head{padding:11px 26px 11px 16px}
+  .panel-head h3{font-size:17px}
+  .srow{grid-template-columns:46px 24px minmax(0,1fr) 58px;padding:11px 12px;gap:7px}
+  .srow .a{display:none}
+  .hero{padding:30px 18px 50px;min-height:auto}
+  .hero-title{font-size:clamp(46px,13vw,74px)}
+  .hero-ctas{gap:14px}
+  .cta{min-width:0;width:100%;padding:16px 22px}
+  .logo-badge img{width:min(var(--logo-w,170px),120px)}
+  nav.mainnav a{font-size:17px;padding:8px 12px;letter-spacing:.1em}
+  table.stand th{font-size:11.5px;letter-spacing:.06em;padding:2px 4px 4px}
+  table.stand td{padding:10px 4px;font-size:12.5px}
+  table.stand td .team{font-size:12.5px;gap:6px}
+  table.stand th.c, table.stand td.c{width:28px}
+  .videowrap{grid-template-columns:minmax(0,1fr);gap:16px}
+  .videoteksti h4{font-size:19px}
+  .videonappi{width:100%;justify-content:center}
 }
 </style>
 </head>
@@ -409,6 +507,26 @@ footer{
 
 </section>
 
+<!-- LATEST VIDEO (täytetään sisalto.js:stä) -->
+<section class="wrap videoalue">
+  <div class="panel metal" id="video">
+    <div class="panel-head">
+      <h3 id="video-otsikko"></h3>
+      <a id="video-linkki" href="#" target="_blank" rel="noopener"></a>
+    </div>
+    <div class="videowrap">
+      <div class="videoruutu" id="video-ruutu"></div>
+      <div class="videoteksti">
+        <h4 id="video-nimi"></h4>
+        <p id="video-kuvaus"></p>
+        <a class="videonappi" id="video-katso" href="#" target="_blank" rel="noopener">
+          <span class="ytmerkki" aria-hidden="true">▶</span><span>WATCH ON YOUTUBE</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer id="contact">
   <div class="wrap foot-row">
@@ -441,9 +559,12 @@ footer{
 (function(){
   const S = SISALTO;
   const $ = id => document.getElementById(id);
+  /* e() suojaa sisällön erikoismerkit (< > & "), ettei tekstiin kirjoitettu
+     merkki riko sivun rakennetta. Sisältö näkyy aina juuri niin kuin se on kirjoitettu. */
+  const e = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   const badge = (t,v1,v2) => {
     const dark = /^#e/i.test(v1); // vaalea pallukka -> tumma teksti
-    return '<span class="badge" style="background:radial-gradient(circle at 35% 30%,'+v1+','+v2+')'+(dark?';color:#0b1c3e':'')+'">'+t+'</span>';
+    return '<span class="badge" style="background:radial-gradient(circle at 35% 30%,'+e(v1)+','+e(v2)+')'+(dark?';color:#0b1c3e':'')+'">'+e(t)+'</span>';
   };
   const oletusKuva = () =>
     '<svg class="photo" viewBox="0 0 120 122" xmlns="http://www.w3.org/2000/svg">'+
@@ -458,9 +579,22 @@ footer{
   /* sivun otsikko */
   document.title = S.sivunOtsikko;
 
+  /* logo (valinnainen osio — vanha sisalto.js ilman logo-osiota toimii oletuksilla) */
+  const L = S.logo || {};
+  const rs = document.documentElement.style;
+  rs.setProperty('--logo-w',  ((+L.leveys>0 ? +L.leveys : 170))+'px');
+  rs.setProperty('--logo-fw', ((+L.footerLeveys>0 ? +L.footerLeveys : 86))+'px');
+  rs.setProperty('--logo-x',  ((+L.x||0))+'px');
+  rs.setProperty('--logo-y',  ((+L.y||0))+'px');
+  const logoSrc = L.kuva || 'spirit_of_hockey_logo.png';
+  const hLogo = document.querySelector('.logo-badge img');
+  const fLogo = document.querySelector('.foot-logo');
+  if(hLogo && hLogo.getAttribute('src') !== logoSrc) hLogo.src = logoSrc;
+  if(fLogo && fLogo.getAttribute('src') !== logoSrc) fLogo.src = logoSrc;
+
   /* valikko */
   $('nav-valikko').innerHTML = S.valikko.map(v =>
-    '<a href="'+v.linkki+'"'+(v.aktiivinen?' class="active"':'')+'>'+v.teksti+'</a>').join('');
+    '<a href="'+e(v.linkki)+'"'+(v.aktiivinen?' class="active"':'')+'>'+e(v.teksti)+'</a>').join('');
 
   /* hero */
   $('hero-rivi1').textContent = S.hero.otsikkoRivi1;
@@ -490,12 +624,12 @@ footer{
   const pl = $('pelaajat-linkki'); pl.textContent = S.pelaajat.linkkiTeksti; pl.href = S.pelaajat.linkki;
   $('pelaajat-lista').innerHTML = S.pelaajat.lista.map(p =>
     '<div class="pcard">'+
-      '<span class="num">'+p.numero+'</span>'+
-      '<span class="flag-top"><span class="flag '+p.lippu+'"></span></span>'+
-      (p.kuva ? '<img class="photo" src="'+p.kuva+'" alt="'+p.nimi+'">' : oletusKuva())+
+      '<span class="num">'+e(p.numero)+'</span>'+
+      '<span class="flag-top"><span class="flag '+e(p.lippu)+'"></span></span>'+
+      (p.kuva ? '<img class="photo" src="'+e(p.kuva)+'" alt="'+e(p.nimi)+'">' : oletusKuva())+
       '<div class="info">'+
-        '<div class="name">'+p.nimi+'</div>'+
-        '<div class="pos">'+p.pelipaikka+' • '+p.maa+' <span class="flag '+p.lippu+'"></span></div>'+
+        '<div class="name">'+e(p.nimi)+'</div>'+
+        '<div class="pos">'+e(p.pelipaikka)+' • '+e(p.maa)+' <span class="flag '+e(p.lippu)+'"></span></div>'+
       '</div>'+
     '</div>').join('');
 
@@ -504,11 +638,11 @@ footer{
   const ol = $('ottelut-linkki'); ol.textContent = S.ottelut.linkkiTeksti; ol.href = S.ottelut.linkki;
   $('ottelut-lista').innerHTML = S.ottelut.lista.map(o =>
     '<div class="srow">'+
-      '<span class="d">'+o.pvm+'</span>'+
+      '<span class="d">'+e(o.pvm)+'</span>'+
       badge(o.lyhenne,o.vari1,o.vari2)+
-      '<span class="opp">'+o.vastustaja+'</span>'+
-      '<span class="t">'+o.aika+'</span>'+
-      '<span class="a">'+o.halli+'</span>'+
+      '<span class="opp">'+e(o.vastustaja)+'</span>'+
+      '<span class="t">'+e(o.aika)+'</span>'+
+      '<span class="a">'+e(o.halli)+'</span>'+
     '</div>').join('');
 
   /* sarjataulukko */
@@ -516,17 +650,48 @@ footer{
   const sl = $('sarja-linkki'); sl.textContent = S.sarjataulukko.linkkiTeksti; sl.href = S.sarjataulukko.linkki;
   $('sarja-rivit').innerHTML = S.sarjataulukko.joukkueet.map(j =>
     '<tr'+(j.oma?' class="me"':'')+'>'+
-      '<td class="c">'+j.sija+'</td>'+
-      '<td><span class="team">'+badge(j.lyhenne,j.vari1,j.vari2)+j.nimi+'</span></td>'+
-      '<td class="c">'+j.o+'</td><td class="c">'+j.v+'</td><td class="c">'+j.h+'</td>'+
-      '<td class="c">'+j.jv+'</td><td class="c">'+j.p+'</td>'+
+      '<td class="c">'+e(j.sija)+'</td>'+
+      '<td><span class="team">'+badge(j.lyhenne,j.vari1,j.vari2)+e(j.nimi)+'</span></td>'+
+      '<td class="c">'+e(j.o)+'</td><td class="c">'+e(j.v)+'</td><td class="c">'+e(j.h)+'</td>'+
+      '<td class="c">'+e(j.jv)+'</td><td class="c">'+e(j.p)+'</td>'+
     '</tr>').join('');
+
+  /* uusin video */
+  const videoOsio = document.querySelector('.videoalue');
+  if(S.video && S.video.videoId){
+    if(videoOsio) videoOsio.style.display = '';
+    $('video-otsikko').textContent = S.video.otsikko;
+    const vl = $('video-linkki'); vl.textContent = S.video.linkkiTeksti; vl.href = S.video.linkki;
+    const vn = $('video-nimi'), vk = $('video-kuvaus');
+    vn.textContent = S.video.videonOtsikko || '';
+    vn.style.display = S.video.videonOtsikko ? '' : 'none';
+    vk.textContent = S.video.kuvaus || '';
+    vk.style.display = S.video.kuvaus ? '' : 'none';
+    const vid = encodeURIComponent(S.video.videoId);
+    $('video-katso').href = 'https://www.youtube.com/watch?v=' + vid;
+    const ruutu = $('video-ruutu');
+    ruutu.classList.remove('soi');
+    ruutu.innerHTML =
+      '<img src="https://i.ytimg.com/vi/'+vid+'/maxresdefault.jpg" alt="" '+
+      'onerror="this.src=\'https://i.ytimg.com/vi/'+vid+'/hqdefault.jpg\'">'+
+      '<div class="toista"><span>▶</span></div>'+
+      (S.video.kesto ? '<div class="kesto">'+e(S.video.kesto)+'</div>' : '');
+    ruutu.onclick = () => {
+      ruutu.classList.add('soi');
+      ruutu.innerHTML =
+        '<iframe src="https://www.youtube-nocookie.com/embed/'+vid+'?autoplay=1&rel=0" '+
+        'title="'+e(S.video.videonOtsikko)+'" allow="accelerometer; autoplay; clipboard-write; '+
+        'encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+    };
+  } else if(videoOsio){
+    videoOsio.style.display = 'none';
+  }
 
   /* footer */
   $('footer-nimi').textContent = S.footer.nimi;
   $('footer-kuvaus').textContent = S.footer.kuvaus;
   $('footer-linkit').innerHTML = S.footer.linkit.map(l =>
-    '<a href="'+l.linkki+'">'+l.teksti+'</a>').join('');
+    '<a href="'+e(l.linkki)+'">'+e(l.teksti)+'</a>').join('');
   $('some-instagram').href = S.footer.some.instagram;
   $('some-youtube').href = S.footer.some.youtube;
   $('some-x').href = S.footer.some.x;
