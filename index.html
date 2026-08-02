@@ -174,6 +174,9 @@ nav.mainnav a.active::after{
 
 /* ================= PANELS ================= */
 .panels{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1.25fr) minmax(0,1fr);gap:24px;margin-bottom:34px}
+/* pelaajapaneeli piilotetaan kun pelaajalista on tyhjä (ks. renderöintiskripti) —
+   jäljelle jäävät ottelu- ja sarjataulukkopaneelit jakavat tilan tällä luokalla */
+.panels.ei-pelaajia{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
 .panel{border-radius:18px;padding:20px 20px 22px}
 .panel-head{
   display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;
@@ -354,6 +357,7 @@ footer{
 
 @media(max-width:1200px){
   .panels{grid-template-columns:minmax(0,1fr)}
+  .panels.ei-pelaajia{grid-template-columns:minmax(0,1fr)}
   .strip{grid-template-columns:repeat(2,1fr);gap:18px 0}
   .strip .cell:nth-child(3)::before{display:none}
   .hero{padding:40px 26px 50px;min-height:520px}
@@ -619,19 +623,31 @@ footer{
   $('info4-otsikko').textContent=i.treenit.otsikko;
   $('info4-r1').textContent=i.treenit.rivi1; $('info4-r2').textContent=i.treenit.rivi2; $('info4-r3').textContent=i.treenit.rivi3;
 
-  /* pelaajat */
-  $('pelaajat-otsikko').textContent = S.pelaajat.otsikko;
-  const pl = $('pelaajat-linkki'); pl.textContent = S.pelaajat.linkkiTeksti; pl.href = S.pelaajat.linkki;
-  $('pelaajat-lista').innerHTML = S.pelaajat.lista.map(p =>
-    '<div class="pcard">'+
-      '<span class="num">'+e(p.numero)+'</span>'+
-      '<span class="flag-top"><span class="flag '+e(p.lippu)+'"></span></span>'+
-      (p.kuva ? '<img class="photo" src="'+e(p.kuva)+'" alt="'+e(p.nimi)+'">' : oletusKuva())+
-      '<div class="info">'+
-        '<div class="name">'+e(p.nimi)+'</div>'+
-        '<div class="pos">'+e(p.pelipaikka)+' • '+e(p.maa)+' <span class="flag '+e(p.lippu)+'"></span></div>'+
-      '</div>'+
-    '</div>').join('');
+  /* pelaajat — tyhjä lista on sallittu: kun pelaajia ei ole, koko paneeli
+     piilotetaan (kuten videoalue) ja jäljelle jäävät paneelit jakavat tilan
+     .panels-elementin ei-pelaajia-luokalla */
+  const pelaajaOsio = $('team');
+  const paneelit = document.querySelector('.panels');
+  const pelaajaLista = (S.pelaajat && S.pelaajat.lista) || [];
+  if(pelaajaLista.length){
+    if(pelaajaOsio) pelaajaOsio.style.display = '';
+    if(paneelit) paneelit.classList.remove('ei-pelaajia');
+    $('pelaajat-otsikko').textContent = S.pelaajat.otsikko;
+    const pl = $('pelaajat-linkki'); pl.textContent = S.pelaajat.linkkiTeksti; pl.href = S.pelaajat.linkki;
+    $('pelaajat-lista').innerHTML = pelaajaLista.map(p =>
+      '<div class="pcard">'+
+        '<span class="num">'+e(p.numero)+'</span>'+
+        '<span class="flag-top"><span class="flag '+e(p.lippu)+'"></span></span>'+
+        (p.kuva ? '<img class="photo" src="'+e(p.kuva)+'" alt="'+e(p.nimi)+'">' : oletusKuva())+
+        '<div class="info">'+
+          '<div class="name">'+e(p.nimi)+'</div>'+
+          '<div class="pos">'+e(p.pelipaikka)+' • '+e(p.maa)+' <span class="flag '+e(p.lippu)+'"></span></div>'+
+        '</div>'+
+      '</div>').join('');
+  } else {
+    if(pelaajaOsio) pelaajaOsio.style.display = 'none';
+    if(paneelit) paneelit.classList.add('ei-pelaajia');
+  }
 
   /* ottelut */
   $('ottelut-otsikko').textContent = S.ottelut.otsikko;
