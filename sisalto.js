@@ -55,7 +55,7 @@ const SISALTO = {
     linkkiTeksti: "FULL SCHEDULE ›",
     linkki: "#schedule",
     lista: [
-      { pvm: "MAY 24", lyhenne: "GIFK", vari1: "#2b5cb8", vari2: "#0e1f44", vastustaja: "vs. GIfK Grankulla", aika: "18:00 EEST", halli: "Raisio Ice Arena" }
+      { pvm: "AUG 15", lyhenne: "GrIFK", vari1: "#2b5cb8", vari2: "#0e1f44", vastustaja: "vs. GrIFK Grankulla", aika: "18:30 EEST", halli: "KAUNIAINEN" }
     ]
   },
 
