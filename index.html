@@ -69,6 +69,20 @@ body{
 .haku .haku-laheta:hover{filter:drop-shadow(0 8px 18px rgba(0,0,0,.6)) drop-shadow(0 0 14px rgba(63,140,255,.45))}
 .haku .haku-vihje{color:var(--muted);font-size:13px;line-height:1.45;margin-top:12px}
 .haku .haku-vihje a{color:var(--blue-bright);text-decoration:none}
+.haku .haku-vara{display:none;margin-top:14px;padding-top:12px;border-top:1px solid rgba(180,200,225,.2)}
+.haku .haku-vara.nakyy{display:block}
+.haku .haku-varanapit{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 10px}
+.haku .haku-varanappi{
+  cursor:pointer;color:#fff;text-decoration:none;font:inherit;
+  font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:.06em;
+  padding:9px 16px;border:1px solid #3a4a7d;border-radius:9px;background:rgba(20,48,95,.6);
+  display:inline-block;
+}
+.haku .haku-varanappi:hover{border-color:var(--blue-bright);box-shadow:0 0 12px rgba(63,140,255,.3)}
+.haku textarea{
+  width:100%;background:rgba(8,17,40,.85);border:1px solid #2a3157;border-radius:9px;
+  color:#c9d6e6;padding:10px 12px;font-size:12.5px;font-family:inherit;line-height:1.5;resize:vertical;
+}
 @media (max-width:560px){ .haku .haku-rivit{grid-template-columns:1fr} .haku{padding:20px 16px 18px} }
 
 /* ===== chrome text ===== */
@@ -624,6 +638,14 @@ footer{
       </div>
       <button type="submit" class="haku-laheta">SEND APPLICATION</button>
     </form>
+    <div class="haku-vara" id="haku-vara">
+      <p class="haku-vihje" style="margin:0"><b>Nothing happened?</b> No worries — your application is ready below. Open it in Gmail, or copy it and paste into any email to <a id="haku-sposti-linkki2" href="#">&hellip;</a>:</p>
+      <div class="haku-varanapit">
+        <a class="haku-varanappi" id="haku-gmail" target="_blank" rel="noopener" href="#">Open in Gmail</a>
+        <button type="button" class="haku-varanappi" id="haku-kopioi">Copy application</button>
+      </div>
+      <textarea id="haku-teksti" readonly rows="8"></textarea>
+    </div>
     <p class="haku-vihje">If the button doesn't open your email app, send the details above directly to <a id="haku-sposti-linkki" href="#">&hellip;</a>.</p>
   </div>
 </div>
@@ -796,8 +818,10 @@ footer{
   if(hakuTausta){
     const ha = hakuAsetus();
     $('haku-otsikko').textContent = ha.otsikko;
-    const sl = $('haku-sposti-linkki');
-    sl.textContent = ha.sposti; sl.href = 'mailto:'+ha.sposti;
+    [['haku-sposti-linkki'],['haku-sposti-linkki2']].forEach(([id])=>{
+      const sl = $(id);
+      if(sl){ sl.textContent = ha.sposti; sl.href = 'mailto:'+ha.sposti; }
+    });
     /* kuuntelijat kytketään vain kerran, vaikka skripti ajettaisiin uudelleen
        (editorin esikatselu ajaa tämän jokaisen muutoksen jälkeen) */
     if(!window.__hakuAlustettu){
@@ -811,6 +835,7 @@ footer{
         const href = a.getAttribute('href') || '';
         if(href === '#apply' || href.slice(-6) === '#apply'){
           ev.preventDefault();
+          $('haku-vara').classList.remove('nakyy');
           hakuTausta.classList.add('auki');
           const ek = hakuTausta.querySelector('input'); if(ek) ek.focus();
         }
@@ -831,11 +856,34 @@ footer{
           '',
           'Sent from the spiritofhockey.fi application form'
         ];
-        const osoite = 'mailto:' + hakuAsetus().sposti +
-          '?subject=' + encodeURIComponent('Roster application - ' + arvo('nimi')) +
-          '&body=' + encodeURIComponent(rivit.join('\n'));
+        const sposti = hakuAsetus().sposti;
+        const aihe = 'Roster application - ' + arvo('nimi');
+        const runko = rivit.join('\n');
+        const osoite = 'mailto:' + sposti +
+          '?subject=' + encodeURIComponent(aihe) + '&body=' + encodeURIComponent(runko);
         window.__viimeisinMailto = osoite; /* testattavuutta varten */
+        /* varapolku niille, joilla mailto ei avaa mitään (esim. ei sähköpostiohjelmaa):
+           Gmail-linkki ja kopioitava valmis hakemus */
+        $('haku-gmail').href = 'https://mail.google.com/mail/?view=cm&fs=1' +
+          '&to=' + encodeURIComponent(sposti) +
+          '&su=' + encodeURIComponent(aihe) + '&body=' + encodeURIComponent(runko);
+        $('haku-teksti').value = 'To: ' + sposti + '\nSubject: ' + aihe + '\n\n' + runko;
+        $('haku-vara').classList.add('nakyy');
         location.href = osoite;
+      });
+      $('haku-kopioi').addEventListener('click', () => {
+        const ta = $('haku-teksti');
+        ta.focus(); ta.select();
+        const valmis = () => {
+          const n = $('haku-kopioi');
+          n.textContent = 'Copied ✓';
+          setTimeout(() => { n.textContent = 'Copy application'; }, 2000);
+        };
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(ta.value).then(valmis, () => { document.execCommand('copy'); valmis(); });
+        } else {
+          document.execCommand('copy'); valmis();
+        }
       });
     }
   }
