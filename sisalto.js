@@ -33,7 +33,7 @@ const SISALTO = {
   infopalkki: {
     seuraavaPeli: { otsikko: "NEXT GAME", rivi1: "vs. Salamat", rivi2: "MAY 24, 2025 • 18:00 EEST", rivi3: "RAISIO ICE ARENA" },
     viimeisinTulos: { otsikko: "LATEST RESULT", rivi1: "", rivi2: "", rivi3: "" },
-    kansainvalisetPelaajat: { otsikko: "INTERNATIONAL PLAYERS", iso_numero: "18", alateksti: "FROM 9 COUNTRIES" },
+    kansainvalisetPelaajat: { otsikko: "INTERNATIONAL PLAYERS", iso_numero: "", alateksti: "FROM 5 COUNTRIES" },
     treenit: { otsikko: "ELITE TRAINING", rivi1: "HIGH PERFORMANCE COACHING", rivi2: "WORLD-CLASS FACILITIES", rivi3: "ACADEMIC SUPPORT" }
   },
 
