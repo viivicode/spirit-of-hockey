@@ -96,6 +96,14 @@ const SISALTO = {
     y: -25
   },
 
+  // ---------- HAKULOMAKE (APPLY-napit) ----------
+  // Lomake aukeaa kaikista linkeistä joiden osoite on #apply.
+  // sposti = osoite johon hakemukset lähetetään.
+  hakemus: {
+    otsikko: "ROSTER APPLICATION",
+    sposti: "eetu.kilpi@spiritofhockey.fi"
+  },
+
   // ---------- ALAPALKKI ----------
   footer: {
     nimi: "SPIRIT OF HOCKEY",
