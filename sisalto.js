@@ -41,7 +41,7 @@ const SISALTO = {
   // lippu: "fi" (Suomi), "de" (Saksa), "se" (Ruotsi), "ca" (Kanada), "us" (USA), "au" (Australia), "es" (Espanja), "ru" (Venäjä), "by" (Valko-Venäjä)
   // kuva: kuvatiedoston nimi tai null (piirretty oletushahmo)
   pelaajat: {
-    otsikko: "FEATURED PLAYERS",
+    otsikko: " FEATURED PLAYERS",
     linkkiTeksti: "VIEW ALL ›",
     linkki: "#team",
     lista: [
@@ -51,7 +51,7 @@ const SISALTO = {
 
   // ---------- OTTELUOHJELMA ----------
   ottelut: {
-    otsikko: "SCHEDULE / RESULTS",
+    otsikko: " SCHEDULE / RESULTS",
     linkkiTeksti: "FULL SCHEDULE ›",
     linkki: "#schedule",
     lista: [
@@ -63,7 +63,7 @@ const SISALTO = {
   // oma: true = rivi korostetaan sinisellä
   // o = ottelut, v = voitot, h = häviöt, jv = jatkoaikahäviöt, p = pisteet
   sarjataulukko: {
-    otsikko: "STANDINGS",
+    otsikko: " STANDINGS",
     linkkiTeksti: "VIEW FULL STANDINGS ›",
     linkki: "#standings",
     joukkueet: [
