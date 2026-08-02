@@ -402,6 +402,15 @@ footer{
   font-weight:600;font-size:16px;letter-spacing:.14em;
 }
 .foot-links a:hover{color:#fff;text-shadow:0 0 12px var(--blue-glow)}
+/* alapalkin yhteyshenkilöt (CONTACT-osio) */
+.yhteys{margin-top:24px;padding-top:20px;border-top:1px solid rgba(140,170,210,.18)}
+.yhteys-otsikko{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:.22em;color:var(--muted);margin-bottom:14px}
+.yhteys-kortit{display:flex;gap:46px;row-gap:20px;flex-wrap:wrap}
+.yhteys-kortti{display:flex;flex-direction:column;gap:3px}
+.yhteys-kortti .yn{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:.08em;color:#fff}
+.yhteys-kortti .yr{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.yhteys-kortti a{color:var(--blue-bright);text-decoration:none;font-size:14px;letter-spacing:.03em}
+.yhteys-kortti a:hover{text-shadow:0 0 10px var(--blue-glow)}
 .socials{display:flex;gap:14px;padding-left:26px;border-left:1px solid rgba(140,170,210,.3)}
 .socials a{
   width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
@@ -617,6 +626,8 @@ footer{
       </a>
     </div>
   </div>
+  <!-- yhteyshenkilöt täytetään sisalto.js:n yhteystiedot-osiosta (renderöintiskripti) -->
+  <div class="wrap yhteys" id="footer-yhteys" style="display:none"></div>
 </footer>
 
 <!-- APPLY-HAKULOMAKE (kentät täytetään ja logiikka kytketään renderöintiskriptissä) -->
@@ -805,6 +816,33 @@ footer{
   $('some-youtube').href = S.footer.some.youtube;
   $('some-x').href = S.footer.some.x;
   $('some-sposti').href = 'mailto:'+S.footer.some.sahkoposti;
+
+  /* yhteyshenkilöt (CONTACT-osio alapalkissa) — vanha sisalto.js ilman
+     yhteystiedot-osiota näyttää oletushenkilöt; tyhjä lista piilottaa osion */
+  const yt = S.yhteystiedot || {
+    otsikko: 'CONTACT US',
+    lista: [
+      { nimi:'Eetu Kilpi',  rooli:'', sposti:'eetu.kilpi@spiritofhockey.fi',  puhelin:'+358 50 330 2271' },
+      { nimi:'Leevi Kilpi', rooli:'', sposti:'leevi.kilpi@spiritofhockey.fi', puhelin:'' }
+    ]
+  };
+  const ytAlue = $('footer-yhteys');
+  if(ytAlue){
+    const ytLista = yt.lista || [];
+    if(ytLista.length){
+      ytAlue.innerHTML = '<div class="yhteys-otsikko">'+e(yt.otsikko||'CONTACT US')+'</div>'+
+        '<div class="yhteys-kortit">'+ytLista.map(h =>
+          '<div class="yhteys-kortti">'+
+            '<div class="yn">'+e(h.nimi)+'</div>'+
+            (h.rooli ? '<div class="yr">'+e(h.rooli)+'</div>' : '')+
+            (h.sposti ? '<a href="mailto:'+e(h.sposti)+'">'+e(h.sposti)+'</a>' : '')+
+            (h.puhelin ? '<a href="tel:'+e(String(h.puhelin).replace(/[^+0-9]/g,''))+'">'+e(h.puhelin)+'</a>' : '')+
+          '</div>').join('')+'</div>';
+      ytAlue.style.display = '';
+    } else {
+      ytAlue.style.display = 'none';
+    }
+  }
 
   /* hakulomake — avautuu kaikista #apply-linkeistä. Asetukset luetaan
      sisalto.js:n hakemus-osiosta (vanha sisältö ilman osiota toimii oletuksilla).
