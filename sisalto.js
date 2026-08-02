@@ -32,7 +32,7 @@ const SISALTO = {
   // ---------- INFOPALKKI (4 laatikkoa) ----------
   infopalkki: {
     seuraavaPeli: { otsikko: "NEXT GAME", rivi1: "vs. Salamat", rivi2: "MAY 24, 2025 • 18:00 EEST", rivi3: "RAISIO ICE ARENA" },
-    viimeisinTulos: { otsikko: "LATEST RESULT", rivi1: "W 5–2 vs. JYP Jyväskylä", rivi2: "MAY 17, 2025", rivi3: "RAISIO ICE ARENA" },
+    viimeisinTulos: { otsikko: "LATEST RESULT", rivi1: "", rivi2: "", rivi3: "" },
     kansainvalisetPelaajat: { otsikko: "INTERNATIONAL PLAYERS", iso_numero: "18", alateksti: "FROM 9 COUNTRIES" },
     treenit: { otsikko: "ELITE TRAINING", rivi1: "HIGH PERFORMANCE COACHING", rivi2: "WORLD-CLASS FACILITIES", rivi3: "ACADEMIC SUPPORT" }
   },
@@ -40,13 +40,13 @@ const SISALTO = {
   // ---------- PELAAJAT ----------
   // lippu: "fi" (Suomi), "de" (Saksa), "se" (Ruotsi)
   // kuva: kuvatiedoston nimi tai null (piirretty oletushahmo)
-  // Tyhjä lista [] on sallittu: silloin koko FEATURED PLAYERS -paneeli
-  // piilotetaan sivulta automaattisesti.
   pelaajat: {
     otsikko: "FEATURED PLAYERS",
     linkkiTeksti: "VIEW ALL ›",
     linkki: "#team",
-    lista: []
+    lista: [
+      { numero: 22, nimi: "Wyatt Brooks", pelipaikka: "F", maa: "USA", lippu: "fi", kuva: null }
+    ]
   },
 
   // ---------- OTTELUOHJELMA ----------
@@ -115,4 +115,3 @@ const SISALTO = {
     }
   }
 };
-
