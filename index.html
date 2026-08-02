@@ -45,6 +45,32 @@ body{
   box-shadow:0 10px 30px rgba(0,0,0,.55);
 }
 
+/* ===== hakulomake (APPLY) =====
+   Avautuu kaikista linkeistä joiden osoite päättyy #apply. Lähetä-nappi avaa
+   hakijan sähköpostiohjelman valmiiksi täytettynä — ei taustapalvelinta. */
+.haku-tausta{position:fixed;inset:0;background:rgba(3,8,20,.82);z-index:80;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:38px 14px}
+.haku-tausta.auki{display:flex}
+.haku{max-width:560px;width:100%;margin:auto 0;position:relative;padding:24px 26px 22px}
+.haku-sulje{position:absolute;top:2px;right:4px;background:none;border:0;color:#c9d6e6;font-size:22px;cursor:pointer;line-height:1;padding:6px;z-index:2}
+.haku-sulje:hover{color:#fff}
+.haku h3{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:27px;letter-spacing:.05em;margin-bottom:4px}
+.haku .haku-seloste{color:var(--muted);font-size:14px;line-height:1.45;margin-bottom:16px}
+.haku form{display:grid;gap:12px}
+.haku .haku-rivit{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.haku label{display:block;font-family:'Saira Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.12em;color:#c9d6e6;margin-bottom:5px;text-transform:uppercase}
+.haku input{width:100%;background:rgba(8,17,40,.85);border:1px solid #2a3157;border-radius:9px;color:#fff;padding:11px 12px;font:inherit;font-size:15px}
+.haku input:focus{outline:2px solid var(--blue-bright);border-color:transparent}
+.haku .haku-laheta{
+  margin-top:4px;cursor:pointer;border:0;color:#fff;
+  font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:19px;letter-spacing:.08em;
+  padding:14px 26px;background:url("ui-cta-button.png") no-repeat;background-size:100% 100%;
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.5));
+}
+.haku .haku-laheta:hover{filter:drop-shadow(0 8px 18px rgba(0,0,0,.6)) drop-shadow(0 0 14px rgba(63,140,255,.45))}
+.haku .haku-vihje{color:var(--muted);font-size:13px;line-height:1.45;margin-top:12px}
+.haku .haku-vihje a{color:var(--blue-bright);text-decoration:none}
+@media (max-width:560px){ .haku .haku-rivit{grid-template-columns:1fr} .haku{padding:20px 16px 18px} }
+
 /* ===== chrome text ===== */
 .chrome{
   background:linear-gradient(180deg,#ffffff 0%,#eef3f9 28%,#a9bacd 48%,#f4f8fc 54%,#8b9cb3 78%,#dfe7f0 100%);
@@ -179,8 +205,8 @@ nav.mainnav a.active::after{
 .panels.ei-pelaajia{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
 .panel{border-radius:18px;padding:20px 20px 22px}
 .panel-head{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;
-  padding:12px 40px 12px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;
+  padding:12px 40px 12px 32px;
   background:url("ui-panel-header.png") no-repeat;
   background-size:100% 100%;
 }
@@ -193,6 +219,13 @@ nav.mainnav a.active::after{
   font-family:'Saira Condensed',sans-serif;white-space:nowrap;
 }
 .panel-head a:hover{text-shadow:0 0 12px var(--blue-glow)}
+/* kapea työpöytäväli (3 paneelia rinnakkain mutta vähän tilaa):
+   otsikot ja linkit hieman pienemmiksi, ettei teksti vuoda palkin viisteen yli */
+@media (max-width:1380px) and (min-width:1201px){
+  .panel-head{padding:11px 20px 11px 24px;gap:6px}
+  .panel-head h3{font-size:15.5px;letter-spacing:.03em}
+  .panel-head a{font-size:10.5px;letter-spacing:.02em}
+}
 
 /* players */
 .players{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -381,8 +414,9 @@ footer{
   .strip .cell + .cell::before{display:none}
   .strip .icon{width:52px;height:52px}
   .panel{padding:16px 14px 18px}
-  .panel-head{padding:11px 26px 11px 16px}
-  .panel-head h3{font-size:17px}
+  .panel-head{padding:11px 26px 11px 18px;gap:8px}
+  .panel-head h3{font-size:17px;letter-spacing:.04em}
+  .panel-head a{font-size:11px;letter-spacing:.03em}
   .srow{grid-template-columns:46px 24px minmax(0,1fr) 58px;padding:11px 12px;gap:7px}
   .srow .a{display:none}
   .hero{padding:30px 18px 50px;min-height:auto}
@@ -398,6 +432,13 @@ footer{
   .videowrap{grid-template-columns:minmax(0,1fr);gap:16px}
   .videoteksti h4{font-size:19px}
   .videonappi{width:100%;justify-content:center}
+}
+
+/* kapeat puhelimet: pitkät paneeliotsikot (SCHEDULE / RESULTS) tarvitsevat vielä lisää tilaa */
+@media (max-width:420px){
+  .panel-head{padding:10px 16px 10px 14px;gap:6px}
+  .panel-head h3{font-size:clamp(13px,3.9vw,15.5px);letter-spacing:.01em}
+  .panel-head a{font-size:clamp(9px,2.7vw,10px);letter-spacing:.01em}
 }
 </style>
 </head>
@@ -564,6 +605,29 @@ footer{
   </div>
 </footer>
 
+<!-- APPLY-HAKULOMAKE (kentät täytetään ja logiikka kytketään renderöintiskriptissä) -->
+<div class="haku-tausta" id="haku-tausta">
+  <div class="haku metal" role="dialog" aria-modal="true" aria-labelledby="haku-otsikko">
+    <button type="button" class="haku-sulje" id="haku-sulje" aria-label="Close">✕</button>
+    <h3 class="chrome" id="haku-otsikko">ROSTER APPLICATION</h3>
+    <p class="haku-seloste">Fill in your details. Pressing <b>Send application</b> opens your email app with the application ready — just hit send.</p>
+    <form id="haku-lomake">
+      <div><label for="haku-nimi">Full name</label><input id="haku-nimi" name="nimi" required autocomplete="name"></div>
+      <div class="haku-rivit">
+        <div><label for="haku-vuosi">Year of birth</label><input id="haku-vuosi" name="syntymavuosi" required inputmode="numeric" placeholder="e.g. 2007"></div>
+        <div><label for="haku-paikka">Position</label><input id="haku-paikka" name="pelipaikka" required placeholder="F / D / G"></div>
+      </div>
+      <div><label for="haku-maa">Country</label><input id="haku-maa" name="maa" required autocomplete="country-name"></div>
+      <div class="haku-rivit">
+        <div><label for="haku-email">Email</label><input id="haku-email" name="sposti" type="email" required autocomplete="email"></div>
+        <div><label for="haku-puhelin">Phone</label><input id="haku-puhelin" name="puhelin" required autocomplete="tel"></div>
+      </div>
+      <button type="submit" class="haku-laheta">SEND APPLICATION</button>
+    </form>
+    <p class="haku-vihje">If the button doesn't open your email app, send the details above directly to <a id="haku-sposti-linkki" href="#">&hellip;</a>.</p>
+  </div>
+</div>
+
 <script src="sisalto.js"></script>
 <script>
 /* ==== Tämä skripti täyttää sivun sisalto.js:n tiedoilla. Älä muokkaa tätä — muokkaa sisalto.js-tiedostoa. ==== */
@@ -719,6 +783,62 @@ footer{
   $('some-youtube').href = S.footer.some.youtube;
   $('some-x').href = S.footer.some.x;
   $('some-sposti').href = 'mailto:'+S.footer.some.sahkoposti;
+
+  /* hakulomake — avautuu kaikista #apply-linkeistä. Asetukset luetaan
+     sisalto.js:n hakemus-osiosta (vanha sisältö ilman osiota toimii oletuksilla).
+     Editorin esikatselussa lomaketta ei avata (ed-tyyli-tunnistus). */
+  const hakuAsetus = () => {
+    const h = (window.SISALTO && window.SISALTO.hakemus) || S.hakemus || {};
+    return { sposti: h.sposti || 'eetu.kilpi@spiritofhockey.fi',
+             otsikko: h.otsikko || 'ROSTER APPLICATION' };
+  };
+  const hakuTausta = $('haku-tausta');
+  if(hakuTausta){
+    const ha = hakuAsetus();
+    $('haku-otsikko').textContent = ha.otsikko;
+    const sl = $('haku-sposti-linkki');
+    sl.textContent = ha.sposti; sl.href = 'mailto:'+ha.sposti;
+    /* kuuntelijat kytketään vain kerran, vaikka skripti ajettaisiin uudelleen
+       (editorin esikatselu ajaa tämän jokaisen muutoksen jälkeen) */
+    if(!window.__hakuAlustettu){
+      window.__hakuAlustettu = true;
+      const editorissa = () => !!document.getElementById('ed-tyyli');
+      const sulje = () => hakuTausta.classList.remove('auki');
+      document.addEventListener('click', ev => {
+        if(editorissa()) return;
+        const a = ev.target && ev.target.closest ? ev.target.closest('a') : null;
+        if(!a) return;
+        const href = a.getAttribute('href') || '';
+        if(href === '#apply' || href.slice(-6) === '#apply'){
+          ev.preventDefault();
+          hakuTausta.classList.add('auki');
+          const ek = hakuTausta.querySelector('input'); if(ek) ek.focus();
+        }
+      });
+      $('haku-sulje').addEventListener('click', sulje);
+      hakuTausta.addEventListener('click', ev => { if(ev.target === hakuTausta) sulje(); });
+      document.addEventListener('keydown', ev => { if(ev.key === 'Escape') sulje(); });
+      $('haku-lomake').addEventListener('submit', ev => {
+        ev.preventDefault();
+        const f = ev.target, arvo = n => (f.elements[n].value || '').trim();
+        const rivit = [
+          'Name: ' + arvo('nimi'),
+          'Year of birth: ' + arvo('syntymavuosi'),
+          'Position: ' + arvo('pelipaikka'),
+          'Country: ' + arvo('maa'),
+          'Email: ' + arvo('sposti'),
+          'Phone: ' + arvo('puhelin'),
+          '',
+          'Sent from the spiritofhockey.fi application form'
+        ];
+        const osoite = 'mailto:' + hakuAsetus().sposti +
+          '?subject=' + encodeURIComponent('Roster application - ' + arvo('nimi')) +
+          '&body=' + encodeURIComponent(rivit.join('\n'));
+        window.__viimeisinMailto = osoite; /* testattavuutta varten */
+        location.href = osoite;
+      });
+    }
+  }
 })();
 </script>
 
