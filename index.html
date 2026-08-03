@@ -767,6 +767,16 @@ footer{
   /* e() suojaa sisällön erikoismerkit (< > & "), ettei tekstiin kirjoitettu
      merkki riko sivun rakennetta. Sisältö näkyy aina juuri niin kuin se on kirjoitettu. */
   const e = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  /* urli() korjaa sisältöön kirjoitetut linkit: "instagram.com/spiritu20" ilman
+     https://-alkua tulkittaisiin sivuston omaksi alasivuksi → täydennetään alku.
+     Ankkurit (#...), polut (/...), mailto:, tel: ja valmiit http(s)-osoitteet
+     menevät läpi sellaisenaan. */
+  const urli = u => {
+    u = String(u==null?'':u).trim();
+    if(!u || u === '#') return u || '#';
+    if(/^(https?:|mailto:|tel:|\/|#)/i.test(u)) return u;
+    return 'https://' + u;
+  };
   /* oman joukkueen tunnus: Spiritin logo (sisällön logo tai vakiotiedosto).
      Koko sisällöstä (sarjataulukko.logoKoko), rajattu välille 20–120 px —
      --lpk asetetaan .team-elementille, jotta myös rivin mitoitus näkee sen. */
@@ -807,7 +817,7 @@ footer{
 
   /* valikko */
   $('nav-valikko').innerHTML = S.valikko.map(v =>
-    '<a href="'+e(v.linkki)+'"'+(v.aktiivinen?' class="active"':'')+'>'+e(v.teksti)+'</a>').join('');
+    '<a href="'+e(urli(v.linkki))+'"'+(v.aktiivinen?' class="active"':'')+'>'+e(v.teksti)+'</a>').join('');
 
   /* hero */
   $('hero-rivi1').textContent = S.hero.otsikkoRivi1;
@@ -815,7 +825,7 @@ footer{
   $('hero-alaotsikko').textContent = S.hero.alaotsikko;
   [['hero-nappi1',S.hero.nappi1],['hero-nappi2',S.hero.nappi2]].forEach(([id,n])=>{
     const el = $(id);
-    el.href = n.linkki;
+    el.href = urli(n.linkki);
     el.querySelector('small').textContent = n.pieniTeksti;
     el.querySelector('strong').textContent = n.isoTeksti;
   });
@@ -831,7 +841,7 @@ footer{
     const mTeksti = sp.mainosTeksti !== undefined ? sp.mainosTeksti : 'WATCH GAMES LIVE ON LEIJONAT.TV — 15.99 €/month';
     const mLinkki = sp.mainosLinkki !== undefined ? sp.mainosLinkki : 'https://www.leijonat.tv';
     const mEl = $('info1-tvlinkki');
-    if(mTeksti){ mEl.textContent = mTeksti; mEl.href = mLinkki || '#'; mEl.style.display = 'inline-block'; }
+    if(mTeksti){ mEl.textContent = mTeksti; mEl.href = urli(mLinkki); mEl.style.display = 'inline-block'; }
     else mEl.style.display = 'none';
   }
   $('info2-otsikko').textContent=i.viimeisinTulos.otsikko;
@@ -852,7 +862,7 @@ footer{
     if(pelaajaOsio) pelaajaOsio.style.display = '';
     if(paneelit) paneelit.classList.remove('ei-pelaajia');
     $('pelaajat-otsikko').textContent = S.pelaajat.otsikko;
-    const pl = $('pelaajat-linkki'); pl.textContent = S.pelaajat.linkkiTeksti; pl.href = S.pelaajat.linkki;
+    const pl = $('pelaajat-linkki'); pl.textContent = S.pelaajat.linkkiTeksti; pl.href = urli(S.pelaajat.linkki);
     $('pelaajat-lista').innerHTML = pelaajaLista.map((p, pi) =>
       '<div class="pcard" data-i="'+pi+'" title="'+e(p.nimi)+'">'+
         '<span class="num">'+e(p.numero)+'</span>'+
@@ -870,7 +880,7 @@ footer{
 
   /* ottelut */
   $('ottelut-otsikko').textContent = S.ottelut.otsikko;
-  const ol = $('ottelut-linkki'); ol.textContent = S.ottelut.linkkiTeksti; ol.href = S.ottelut.linkki;
+  const ol = $('ottelut-linkki'); ol.textContent = S.ottelut.linkkiTeksti; ol.href = urli(S.ottelut.linkki);
   $('ottelut-lista').innerHTML = S.ottelut.lista.map(o =>
     '<div class="srow">'+
       '<span class="d">'+e(o.pvm)+'</span>'+
@@ -882,7 +892,7 @@ footer{
 
   /* sarjataulukko */
   $('sarja-otsikko').textContent = S.sarjataulukko.otsikko;
-  const sl = $('sarja-linkki'); sl.textContent = S.sarjataulukko.linkkiTeksti; sl.href = S.sarjataulukko.linkki;
+  const sl = $('sarja-linkki'); sl.textContent = S.sarjataulukko.linkkiTeksti; sl.href = urli(S.sarjataulukko.linkki);
   $('sarja-rivit').innerHTML = S.sarjataulukko.joukkueet.map(j =>
     '<tr'+(j.oma?' class="me"':'')+'>'+
       '<td class="c">'+e(j.sija)+'</td>'+
@@ -896,7 +906,7 @@ footer{
   if(S.video && S.video.videoId){
     if(videoOsio) videoOsio.style.display = '';
     $('video-otsikko').textContent = S.video.otsikko;
-    const vl = $('video-linkki'); vl.textContent = S.video.linkkiTeksti; vl.href = S.video.linkki;
+    const vl = $('video-linkki'); vl.textContent = S.video.linkkiTeksti; vl.href = urli(S.video.linkki);
     const vn = $('video-nimi'), vk = $('video-kuvaus');
     vn.textContent = S.video.videonOtsikko || '';
     vn.style.display = S.video.videonOtsikko ? '' : 'none';
@@ -926,10 +936,10 @@ footer{
   $('footer-nimi').textContent = S.footer.nimi;
   $('footer-kuvaus').textContent = S.footer.kuvaus;
   $('footer-linkit').innerHTML = S.footer.linkit.map(l =>
-    '<a href="'+e(l.linkki)+'">'+e(l.teksti)+'</a>').join('');
-  $('some-instagram').href = S.footer.some.instagram;
-  $('some-youtube').href = S.footer.some.youtube;
-  $('some-x').href = S.footer.some.x;
+    '<a href="'+e(urli(l.linkki))+'">'+e(l.teksti)+'</a>').join('');
+  $('some-instagram').href = urli(S.footer.some.instagram);
+  $('some-youtube').href = urli(S.footer.some.youtube);
+  $('some-x').href = urli(S.footer.some.x);
   $('some-sposti').href = 'mailto:'+S.footer.some.sahkoposti;
 
   /* yhteyshenkilöt (CONTACT-osio alapalkissa) — vanha sisalto.js ilman
@@ -981,7 +991,7 @@ footer{
         rivi('TEAM', p.joukkue)+
         rivi('LEAGUE', p.sarja)+
         (p.kuvaus ? '<p class="pi-kuvaus">'+e(p.kuvaus)+'</p>' : '')+
-        (p.epLinkki ? '<a class="haku-varanappi" target="_blank" rel="noopener" href="'+e(p.epLinkki)+'">VIEW ON ELITEPROSPECTS ›</a>' : '')+
+        (p.epLinkki ? '<a class="haku-varanappi" target="_blank" rel="noopener" href="'+e(urli(p.epLinkki))+'">VIEW ON ELITEPROSPECTS ›</a>' : '')+
       '</div></div>';
   };
   if(!window.__pelaajaAlustettu){
