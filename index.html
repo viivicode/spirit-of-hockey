@@ -828,7 +828,7 @@ footer{
      tyhjäksi muokattu teksti piilottaa linkin kokonaan */
   {
     const sp = i.seuraavaPeli;
-    const mTeksti = sp.mainosTeksti !== undefined ? sp.mainosTeksti : 'WATCH GAMES LIVE ON LEIJONAT.TV — 15,99 €/kk';
+    const mTeksti = sp.mainosTeksti !== undefined ? sp.mainosTeksti : 'WATCH GAMES LIVE ON LEIJONAT.TV — 15.99 €/month';
     const mLinkki = sp.mainosLinkki !== undefined ? sp.mainosLinkki : 'https://www.leijonat.tv';
     const mEl = $('info1-tvlinkki');
     if(mTeksti){ mEl.textContent = mTeksti; mEl.href = mLinkki || '#'; mEl.style.display = 'inline-block'; }
