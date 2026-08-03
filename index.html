@@ -229,6 +229,15 @@ nav.mainnav a.active::after{
 .strip p{font-size:14.5px;line-height:1.45;color:var(--muted);font-weight:500;letter-spacing:.04em}
 .strip p b{color:#e5edf7;font-weight:700}
 .strip .big{font-family:'Saira Condensed',sans-serif;font-size:34px;font-weight:800;color:#fff;line-height:1;margin:2px 0;text-shadow:0 0 16px rgba(63,140,255,.5)}
+/* Leijonat.tv-mainoslinkki NEXT GAME -laatikossa (valinnainen; tyhjä teksti piilottaa) */
+.strip a.mainos{
+  display:inline-block;margin-top:7px;
+  font-family:'Saira Condensed',sans-serif;font-size:15px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;
+  color:#5fb0ff;text-decoration:none;
+  border-bottom:1px solid rgba(95,176,255,.5);
+}
+.strip a.mainos:hover{color:#9dd0ff;border-bottom-color:rgba(157,208,255,.8)}
 
 /* ================= PANELS ================= */
 .panels{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1.25fr) minmax(0,1fr);gap:24px;margin-bottom:34px}
@@ -582,6 +591,7 @@ footer{
       <div>
         <h4 id="info1-otsikko"></h4>
         <p><b id="info1-r1"></b><br><span id="info1-r2"></span><br><span id="info1-r3"></span></p>
+        <a id="info1-mainos" class="mainos" target="_blank" rel="noopener" style="display:none"></a>
       </div>
     </div>
     <div class="cell">
@@ -812,6 +822,16 @@ footer{
   const i = S.infopalkki;
   $('info1-otsikko').textContent=i.seuraavaPeli.otsikko;
   $('info1-r1').textContent=i.seuraavaPeli.rivi1; $('info1-r2').textContent=i.seuraavaPeli.rivi2; $('info1-r3').textContent=i.seuraavaPeli.rivi3;
+  /* Leijonat.tv-mainos: valinnainen — vanha sisältö ilman kenttiä saa oletukset,
+     tyhjäksi muokattu teksti piilottaa linkin kokonaan */
+  {
+    const sp = i.seuraavaPeli;
+    const mTeksti = sp.mainosTeksti !== undefined ? sp.mainosTeksti : 'WATCH GAMES LIVE ON LEIJONAT.TV — 15,99 €/kk';
+    const mLinkki = sp.mainosLinkki !== undefined ? sp.mainosLinkki : 'https://www.leijonat.tv';
+    const mEl = $('info1-mainos');
+    if(mTeksti){ mEl.textContent = mTeksti; mEl.href = mLinkki || '#'; mEl.style.display = 'inline-block'; }
+    else mEl.style.display = 'none';
+  }
   $('info2-otsikko').textContent=i.viimeisinTulos.otsikko;
   $('info2-r1').textContent=i.viimeisinTulos.rivi1; $('info2-r2').textContent=i.viimeisinTulos.rivi2; $('info2-r3').textContent=i.viimeisinTulos.rivi3;
   $('info3-otsikko').textContent=i.kansainvalisetPelaajat.otsikko;
