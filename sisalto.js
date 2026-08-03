@@ -125,9 +125,9 @@ const SISALTO = {
     ],
     some: {
       instagram: "#",
-      youtube:   "#",
+      youtube:   "https://www.youtube.com/@SpiritOfHockeyFinland",
       x:         "#",
-      sahkoposti: "info@spiritofhockey.fi"
+      sahkoposti: ""
     }
   }
 };
