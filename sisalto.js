@@ -78,7 +78,7 @@ const SISALTO = {
     otsikko: "                   LATEST VIDEO",
     linkkiTeksti: "ALL VIDEOS ›",
     linkki: "https://www.youtube.com/@SpiritOfHockeyFinland",
-    videoId: "amjX4zAhMC4",
+    videoId: "REryTPXjznY",
     videonOtsikko: "Our First International Player Arrives in Finland — Inside Spirit Ep. 1",
     kuvaus: "",
     kesto: "7:45"
@@ -102,6 +102,16 @@ const SISALTO = {
   hakemus: {
     otsikko: "ROSTER APPLICATION",
     sposti: "eetu.kilpi@spiritofhockey.fi"
+  },
+
+  // ---------- YHTEYSTIEDOT (alapalkin CONTACT-osio) ----------
+  // Tyhjä lista piilottaa koko osion.
+  yhteystiedot: {
+    otsikko: "CONTACT US",
+    lista: [
+      { nimi: "Eetu Kilpi", rooli: "", sposti: "eetu.kilpi@spiritofhockey.fi", puhelin: "+358 50 330 2271" },
+      { nimi: "Leevi Kilpi", rooli: "", sposti: "leevi.kilpi@spiritofhockey.fi", puhelin: "" }
+    ]
   },
 
   // ---------- ALAPALKKI ----------
