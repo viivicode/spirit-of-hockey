@@ -141,6 +141,10 @@ nav.mainnav a{
   letter-spacing:.14em;padding:0 26px;
 }
 nav.mainnav a:hover{color:#fff;text-shadow:0 0 14px var(--blue-glow)}
+/* pelkkä teksti -valikkokohta: ei osoitinta eikä hover-hehkua */
+nav.mainnav a.eilinkki{cursor:default}
+nav.mainnav a.eilinkki:hover{color:var(--muted);text-shadow:none}
+nav.mainnav a.eilinkki.active:hover{color:#fff}
 nav.mainnav a.active{
   color:#fff;
   background:linear-gradient(180deg,rgba(63,140,255,.28),rgba(29,95,216,.10));
@@ -816,8 +820,15 @@ footer{
   if(fLogo && fLogo.getAttribute('src') !== logoSrc) fLogo.src = logoSrc;
 
   /* valikko */
-  $('nav-valikko').innerHTML = S.valikko.map(v =>
-    '<a href="'+e(urli(v.linkki))+'"'+(v.aktiivinen?' class="active"':'')+'>'+e(v.teksti)+'</a>').join('');
+  /* valikkokohta jonka linkki on tyhjä tai "#" näytetään pelkkänä tekstinä
+     (sama sääntö kuin some-kuvakkeilla) */
+  $('nav-valikko').innerHTML = S.valikko.map(v => {
+    const l = String(v.linkki == null ? '' : v.linkki).trim();
+    const lk = (v.aktiivinen ? ' active' : '');
+    if(!l || l === '#')
+      return '<a class="eilinkki'+lk+'">'+e(v.teksti)+'</a>';
+    return '<a href="'+e(urli(l))+'"'+(lk?' class="active"':'')+'>'+e(v.teksti)+'</a>';
+  }).join('');
 
   /* hero */
   $('hero-rivi1').textContent = S.hero.otsikkoRivi1;
