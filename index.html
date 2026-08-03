@@ -343,8 +343,9 @@ nav.mainnav a.active::after{
    miinusmarginaali estää rivin kasvamisen samassa suhteessa. */
 .badge.badge-logo{
   width:var(--lpk,64px);height:var(--lpk,64px);
-  background:radial-gradient(circle at 35% 30%,#14305f,#081226);padding:2px;
+  background:none;border-radius:0;box-shadow:none;padding:0;
   margin:calc((26px - var(--lpk,64px)) / 3) 0;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.55));
 }
 .badge.badge-logo img{width:100%;height:100%;object-fit:contain;display:block}
 
