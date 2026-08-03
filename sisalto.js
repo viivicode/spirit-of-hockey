@@ -121,11 +121,7 @@ const SISALTO = {
     nimi: "SPIRIT OF HOCKEY",
     kuvaus: "International U20 Hockey Program in Finland",
     linkit: [
-      { teksti: "ABOUT US", linkki: "#" },
-      { teksti: "NEWS", linkki: "#" },
-      { teksti: "ALUMNI", linkki: "#" },
-      { teksti: "PARTNERS", linkki: "#" },
-      { teksti: "FAQ", linkki: "#" }
+      { teksti: "ABOUT US", linkki: "#" }
     ],
     some: {
       instagram: "#",
