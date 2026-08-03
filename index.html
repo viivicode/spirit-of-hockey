@@ -85,6 +85,24 @@ body{
 }
 @media (max-width:560px){ .haku .haku-rivit{grid-template-columns:1fr} .haku{padding:20px 16px 18px} }
 
+/* ===== pelaajan oma sivu (avautuu pelaajakortista) ===== */
+.pcard{cursor:pointer;transition:transform .12s}
+.pcard:hover{transform:translateY(-3px)}
+.pelaaja-kortti-iso{max-width:780px}
+.pelaaja-iso{display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px;align-items:start}
+.pi-kuva{position:relative;border-radius:14px;overflow:hidden;border:1.5px solid rgba(150,180,220,.35);background:radial-gradient(circle at 50% 20%,#1b3a72,#0a1a3a 70%)}
+.pi-kuva img,.pi-kuva svg{width:100%;aspect-ratio:1/1.15;object-fit:cover;display:block}
+.pi-kuva .pi-numero{position:absolute;top:8px;left:12px;font-family:'Saira Condensed',sans-serif;font-style:italic;font-weight:900;font-size:36px;color:#fff;text-shadow:0 0 14px rgba(63,140,255,.7),0 2px 4px rgba(0,0,0,.8)}
+.pi-kuva .flag{position:absolute;top:16px;right:12px}
+.pi-tiedot h3{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:36px;letter-spacing:.04em;line-height:1.05;margin-bottom:4px}
+.pi-alaotsikko{color:var(--blue-bright);font-family:'Saira Condensed',sans-serif;font-weight:700;letter-spacing:.1em;font-size:17px;margin-bottom:16px;text-transform:uppercase}
+.pt-rivi{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid rgba(140,170,210,.15);font-size:15px}
+.pt-rivi span{color:var(--muted);font-family:'Saira Condensed',sans-serif;font-weight:700;letter-spacing:.14em;font-size:13.5px}
+.pt-rivi b{color:#e5edf7;font-weight:700;text-align:right}
+.pi-kuvaus{margin-top:14px;color:var(--muted);line-height:1.55;font-size:14.5px}
+.pi-tiedot .haku-varanappi{margin-top:18px}
+@media (max-width:640px){ .pelaaja-iso{grid-template-columns:1fr} .pi-tiedot h3{font-size:28px} }
+
 /* ===== chrome text ===== */
 .chrome{
   background:linear-gradient(180deg,#ffffff 0%,#eef3f9 28%,#a9bacd 48%,#f4f8fc 54%,#8b9cb3 78%,#dfe7f0 100%);
@@ -687,6 +705,14 @@ footer{
   </div>
 </div>
 
+<!-- PELAAJAN OMA SIVU (täytetään pelaajakortin klikkauksesta, ks. renderöintiskripti) -->
+<div class="haku-tausta" id="pelaaja-tausta">
+  <div class="haku metal pelaaja-kortti-iso" role="dialog" aria-modal="true">
+    <button type="button" class="haku-sulje" id="pelaaja-sulje" aria-label="Close">✕</button>
+    <div id="pelaaja-sisalto"></div>
+  </div>
+</div>
+
 <script src="sisalto.js"></script>
 <script>
 /* ==== Tämä skripti täyttää sivun sisalto.js:n tiedoilla. Älä muokkaa tätä — muokkaa sisalto.js-tiedostoa. ==== */
@@ -771,8 +797,8 @@ footer{
     if(paneelit) paneelit.classList.remove('ei-pelaajia');
     $('pelaajat-otsikko').textContent = S.pelaajat.otsikko;
     const pl = $('pelaajat-linkki'); pl.textContent = S.pelaajat.linkkiTeksti; pl.href = S.pelaajat.linkki;
-    $('pelaajat-lista').innerHTML = pelaajaLista.map(p =>
-      '<div class="pcard">'+
+    $('pelaajat-lista').innerHTML = pelaajaLista.map((p, pi) =>
+      '<div class="pcard" data-i="'+pi+'" title="'+e(p.nimi)+'">'+
         '<span class="num">'+e(p.numero)+'</span>'+
         '<span class="flag-top"><span class="flag '+e(p.lippu)+'"></span></span>'+
         (p.kuva ? '<img class="photo" src="'+e(p.kuva)+'" alt="'+e(p.nimi)+'">' : oletusKuva())+
@@ -875,6 +901,50 @@ footer{
     } else {
       ytAlue.style.display = 'none';
     }
+  }
+
+  /* pelaajan oma sivu — avautuu pelaajakorttia klikkaamalla (ei editorin
+     esikatselussa, jossa klikkaus valitsee muokattavan osan) */
+  const pelaajaSivu = p => {
+    const rivi = (nimi, arvo) => arvo ? '<div class="pt-rivi"><span>'+nimi+'</span><b>'+e(arvo)+'</b></div>' : '';
+    const katisyys = p.katisyys === 'L' ? 'Left' : p.katisyys === 'R' ? 'Right' : (p.katisyys || '');
+    return '<div class="pelaaja-iso">'+
+      '<div class="pi-kuva">'+
+        (p.kuva ? '<img src="'+e(p.kuva)+'" alt="'+e(p.nimi)+'">' : oletusKuva())+
+        '<span class="pi-numero">'+e(p.numero)+'</span>'+
+        '<span class="flag '+e(p.lippu)+'"></span>'+
+      '</div>'+
+      '<div class="pi-tiedot">'+
+        '<h3 class="chrome">'+e(p.nimi)+'</h3>'+
+        '<div class="pi-alaotsikko">#'+e(p.numero)+' • '+e(p.pelipaikka)+' • '+e(p.maa)+'</div>'+
+        rivi('BORN', p.syntymaaika)+
+        rivi('HOMETOWN', p.kotipaikka)+
+        rivi('HEIGHT', p.pituus ? p.pituus+' cm' : '')+
+        rivi('WEIGHT', p.paino ? p.paino+' kg' : '')+
+        rivi('SHOOTS', katisyys)+
+        rivi('TEAM', p.joukkue)+
+        rivi('LEAGUE', p.sarja)+
+        (p.kuvaus ? '<p class="pi-kuvaus">'+e(p.kuvaus)+'</p>' : '')+
+        (p.epLinkki ? '<a class="haku-varanappi" target="_blank" rel="noopener" href="'+e(p.epLinkki)+'">VIEW ON ELITEPROSPECTS ›</a>' : '')+
+      '</div></div>';
+  };
+  if(!window.__pelaajaAlustettu){
+    window.__pelaajaAlustettu = true;
+    const pTausta = $('pelaaja-tausta');
+    const pSulje = () => pTausta.classList.remove('auki');
+    document.addEventListener('click', ev => {
+      if(document.getElementById('ed-tyyli')) return; /* editorin esikatselu */
+      const kortti = ev.target && ev.target.closest ? ev.target.closest('.pcard') : null;
+      if(!kortti) return;
+      const sis = (window.SISALTO || S);
+      const p = sis.pelaajat && sis.pelaajat.lista && sis.pelaajat.lista[+kortti.getAttribute('data-i')];
+      if(!p) return;
+      $('pelaaja-sisalto').innerHTML = pelaajaSivu(p);
+      pTausta.classList.add('auki');
+    });
+    $('pelaaja-sulje').addEventListener('click', pSulje);
+    pTausta.addEventListener('click', ev => { if(ev.target === pTausta) pSulje(); });
+    document.addEventListener('keydown', ev => { if(ev.key === 'Escape') pSulje(); });
   }
 
   /* hakulomake — avautuu kaikista #apply-linkeistä. Asetukset luetaan
