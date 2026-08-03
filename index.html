@@ -478,6 +478,8 @@ footer{
   font-weight:600;font-size:16px;letter-spacing:.14em;
 }
 .foot-links a:hover{color:#fff;text-shadow:0 0 12px var(--blue-glow)}
+.foot-links a.eilinkki{cursor:default}
+.foot-links a.eilinkki:hover{color:var(--muted);text-shadow:none}
 /* alapalkin yhteyshenkilöt (CONTACT-osio) */
 .yhteys{margin-top:28px;padding-top:24px;border-top:1px solid rgba(140,170,210,.18)}
 .yhteys-otsikko{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:20px;letter-spacing:.22em;color:var(--muted);margin-bottom:18px}
@@ -946,8 +948,12 @@ footer{
   /* footer */
   $('footer-nimi').textContent = S.footer.nimi;
   $('footer-kuvaus').textContent = S.footer.kuvaus;
-  $('footer-linkit').innerHTML = S.footer.linkit.map(l =>
-    '<a href="'+e(urli(l.linkki))+'">'+e(l.teksti)+'</a>').join('');
+  /* alapalkin kohta jonka linkki on tyhjä tai "#" näytetään pelkkänä tekstinä */
+  $('footer-linkit').innerHTML = S.footer.linkit.map(l => {
+    const u = String(l.linkki == null ? '' : l.linkki).trim();
+    if(!u || u === '#') return '<a class="eilinkki">'+e(l.teksti)+'</a>';
+    return '<a href="'+e(urli(u))+'">'+e(l.teksti)+'</a>';
+  }).join('');
   /* some-kuvake näytetään vain jos linkki on asetettu (tyhjä tai "#" piilottaa).
      Näin esim. X:n kuvake ei näy ennen kuin osoite on kirjoitettu editoriin. */
   const someKuvake = (id, arvo, href) => {
