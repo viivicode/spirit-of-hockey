@@ -937,10 +937,18 @@ footer{
   $('footer-kuvaus').textContent = S.footer.kuvaus;
   $('footer-linkit').innerHTML = S.footer.linkit.map(l =>
     '<a href="'+e(urli(l.linkki))+'">'+e(l.teksti)+'</a>').join('');
-  $('some-instagram').href = urli(S.footer.some.instagram);
-  $('some-youtube').href = urli(S.footer.some.youtube);
-  $('some-x').href = urli(S.footer.some.x);
-  $('some-sposti').href = 'mailto:'+S.footer.some.sahkoposti;
+  /* some-kuvake näytetään vain jos linkki on asetettu (tyhjä tai "#" piilottaa).
+     Näin esim. X:n kuvake ei näy ennen kuin osoite on kirjoitettu editoriin. */
+  const someKuvake = (id, arvo, href) => {
+    const el = $(id);
+    const on = arvo && String(arvo).trim() && String(arvo).trim() !== '#';
+    el.style.display = on ? '' : 'none';
+    if(on) el.href = href;
+  };
+  someKuvake('some-instagram', S.footer.some.instagram, urli(S.footer.some.instagram));
+  someKuvake('some-youtube', S.footer.some.youtube, urli(S.footer.some.youtube));
+  someKuvake('some-x', S.footer.some.x, urli(S.footer.some.x));
+  someKuvake('some-sposti', S.footer.some.sahkoposti, 'mailto:'+S.footer.some.sahkoposti);
 
   /* yhteyshenkilöt (CONTACT-osio alapalkissa) — vanha sisalto.js ilman
      yhteystiedot-osiota näyttää oletushenkilöt; tyhjä lista piilottaa osion */
