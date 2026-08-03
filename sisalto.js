@@ -131,7 +131,7 @@ const SISALTO = {
       { teksti: "ABOUT US", linkki: "#" }
     ],
     some: {
-      instagram: "#",
+      instagram: "#SpiritU20",
       youtube:   "https://www.youtube.com/@SpiritOfHockeyFinland",
       x:         "#",
       sahkoposti: ""
