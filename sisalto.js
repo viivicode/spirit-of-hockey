@@ -31,7 +31,8 @@ const SISALTO = {
 
   // ---------- INFOPALKKI (4 laatikkoa) ----------
   infopalkki: {
-    seuraavaPeli: { otsikko: "NEXT GAME", rivi1: "vs. GrIFK", rivi2: "AUG 15, 2026 • 18:30 EEST", rivi3: "KAUNIAINEN" },
+    seuraavaPeli: { otsikko: "NEXT GAME", rivi1: "vs. GrIFK", rivi2: "AUG 15, 2026 • 18:30 EEST", rivi3: "KAUNIAINEN",
+                    mainosTeksti: "WATCH GAMES LIVE ON LEIJONAT.TV — 15,99 €/kk", mainosLinkki: "https://www.leijonat.tv" },
     viimeisinTulos: { otsikko: "LATEST RESULT", rivi1: "", rivi2: "", rivi3: "" },
     kansainvalisetPelaajat: { otsikko: "INTERNATIONAL PLAYERS", iso_numero: "", alateksti: "FROM 5 COUNTRIES" },
     treenit: { otsikko: "ELITE TRAINING", rivi1: "HIGH PERFORMANCE COACHING", rivi2: "WORLD-CLASS FACILITIES", rivi3: "ACADEMIC SUPPORT" }
@@ -131,7 +132,7 @@ const SISALTO = {
       { teksti: "ABOUT US", linkki: "#" }
     ],
     some: {
-      instagram: "#SpiritU20",
+      instagram: "instagram.com/spiritu20",
       youtube:   "https://www.youtube.com/@SpiritOfHockeyFinland",
       x:         "#",
       sahkoposti: ""
