@@ -243,8 +243,18 @@ nav.mainnav a.active::after{
   nav.mainnav a{font-size:17px}
   /* iso logopallukka ei mahdu kapeimpaan sarjataulukkoon — pienempi tässä välissä */
   table.stand td .team{gap:5px}
-  /* huom: perussääntö on tiedostossa tämän lohkon jälkeen → tarvitaan tarkempi valitsin */
-  table.stand .badge.badge-logo{width:46px;height:46px;margin:-6px 0}
+  /* huom: perussääntö on tiedostossa tämän lohkon jälkeen → tarvitaan tarkempi valitsin.
+     Kapeimmassa sarjataulukossa logo rajataan 46 px:iin, muuten taulukko vuotaa.
+     Editorin esikatselu (html.editori, aina ~1280 px leveä) näyttää silti täyden koon,
+     koska se edustaa leveää työpöytänäkymää. */
+  table.stand .badge.badge-logo{
+    width:min(var(--lpk,64px),46px);height:min(var(--lpk,64px),46px);
+    margin:calc((26px - min(var(--lpk,64px),46px)) / 3) 0;
+  }
+  html.editori table.stand .badge.badge-logo{
+    width:var(--lpk,64px);height:var(--lpk,64px);
+    margin:calc((26px - var(--lpk,64px)) / 3) 0;
+  }
 }
 
 /* players */
@@ -310,8 +320,14 @@ nav.mainnav a.active::after{
   box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 2px 5px rgba(0,0,0,.5);
   flex:0 0 auto;
 }
-/* oman joukkueen pallukassa näytetään Spiritin logo lyhenteen sijaan — reilusti isompana */
-.badge.badge-logo{width:64px;height:64px;background:radial-gradient(circle at 35% 30%,#14305f,#081226);padding:2px;margin:-12px 0}
+/* oman joukkueen pallukassa näytetään Spiritin logo lyhenteen sijaan.
+   Koko tulee sisällöstä (sarjataulukko.logoKoko → --lpk, oletus 64 px);
+   miinusmarginaali estää rivin kasvamisen samassa suhteessa. */
+.badge.badge-logo{
+  width:var(--lpk,64px);height:var(--lpk,64px);
+  background:radial-gradient(circle at 35% 30%,#14305f,#081226);padding:2px;
+  margin:calc((26px - var(--lpk,64px)) / 3) 0;
+}
 .badge.badge-logo img{width:100%;height:100%;object-fit:contain;display:block}
 
 /* standings */
@@ -680,10 +696,12 @@ footer{
   /* e() suojaa sisällön erikoismerkit (< > & "), ettei tekstiin kirjoitettu
      merkki riko sivun rakennetta. Sisältö näkyy aina juuri niin kuin se on kirjoitettu. */
   const e = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  /* oman joukkueen pallukka: Spiritin logo (sisällön logo tai vakiotiedosto) */
+  /* oman joukkueen pallukka: Spiritin logo (sisällön logo tai vakiotiedosto).
+     Koko sisällöstä (sarjataulukko.logoKoko), rajattu välille 20–120 px. */
   const logoBadge = () => {
     const lk = (S.logo && S.logo.kuva) || 'spirit_of_hockey_logo.png';
-    return '<span class="badge badge-logo"><img src="'+e(lk)+'" alt=""></span>';
+    const koko = Math.max(20, Math.min(120, +(S.sarjataulukko && S.sarjataulukko.logoKoko) || 64));
+    return '<span class="badge badge-logo" style="--lpk:'+koko+'px"><img src="'+e(lk)+'" alt=""></span>';
   };
   const badge = (t,v1,v2) => {
     const dark = /^#e/i.test(v1); // vaalea pallukka -> tumma teksti
