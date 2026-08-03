@@ -259,12 +259,14 @@ nav.mainnav a.active::after{
   .panel-head a{font-size:10.5px;letter-spacing:.02em}
   /* navipalkki vuoti oikealta tässä välissä (mitattu 17 px @1240) */
   nav.mainnav a{font-size:17px}
-  /* iso logopallukka ei mahdu kapeimpaan sarjataulukkoon — pienempi tässä välissä */
   table.stand td .team{gap:5px}
   /* huom: perussääntö on tiedostossa tämän lohkon jälkeen → tarvitaan tarkempi valitsin.
-     Kapeimmassa sarjataulukossa logo rajataan 46 px:iin, muuten taulukko vuotaa.
-     Editorin esikatselu (html.editori, aina ~1280 px leveä) näyttää silti täyden koon,
-     koska se edustaa leveää työpöytänäkymää. */
+     Kapeimmassa sarjataulukossa logo rajataan 46 px:iin, muuten taulukko vuotaa
+     (mitattu: logoKoko 64 → 17 px ylivuoto @1201, logoKoko 100 → 53 px).
+     Editorin esikatselu (html.editori) näyttää silti täyden koon, koska se
+     edustaa leveää työpöytänäkymää. Luokan asettaa sekä editorin agenttiskripti
+     että sivuskripti itse (about:srcdoc-tunnistus), jottei vanhentunut
+     välimuistissa oleva editori riko kokosäädintä. */
   table.stand .badge.badge-logo{
     width:min(var(--lpk,64px),46px);height:min(var(--lpk,64px),46px);
   }
@@ -743,6 +745,13 @@ footer{
 (function(){
   const S = SISALTO;
   const $ = id => document.getElementById(id);
+  /* Editorin esikatselu tunnistetaan itse (iframe on aina about:srcdoc),
+     jottei kokosäädin riko vaikka selaimessa olisi vanha editori välimuistissa.
+     html.editori vapauttaa sarjataulukkologon 46 px:n kokorajasta. */
+  try{
+    if(location.href.indexOf('about:srcdoc') === 0 || document.getElementById('ed-tyyli'))
+      document.documentElement.classList.add('editori');
+  }catch(err){}
   /* e() suojaa sisällön erikoismerkit (< > & "), ettei tekstiin kirjoitettu
      merkki riko sivun rakennetta. Sisältö näkyy aina juuri niin kuin se on kirjoitettu. */
   const e = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
