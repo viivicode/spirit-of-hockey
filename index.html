@@ -239,6 +239,8 @@ nav.mainnav a.active::after{
   .panel-head{padding:11px 20px 11px 24px;gap:6px}
   .panel-head h3{font-size:15.5px;letter-spacing:.03em}
   .panel-head a{font-size:10.5px;letter-spacing:.02em}
+  /* navipalkki vuoti oikealta tässä välissä (mitattu 17 px @1240) */
+  nav.mainnav a{font-size:17px}
 }
 
 /* players */
@@ -304,8 +306,8 @@ nav.mainnav a.active::after{
   box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 2px 5px rgba(0,0,0,.5);
   flex:0 0 auto;
 }
-/* oman joukkueen pallukassa näytetään Spiritin logo lyhenteen sijaan */
-.badge.badge-logo{background:radial-gradient(circle at 35% 30%,#14305f,#081226);padding:3.5px}
+/* oman joukkueen pallukassa näytetään Spiritin logo lyhenteen sijaan — selvästi isompana */
+.badge.badge-logo{width:46px;height:46px;background:radial-gradient(circle at 35% 30%,#14305f,#081226);padding:4px;margin:-6px 0}
 .badge.badge-logo img{width:100%;height:100%;object-fit:contain;display:block}
 
 /* standings */
@@ -407,13 +409,13 @@ footer{
 }
 .foot-links a:hover{color:#fff;text-shadow:0 0 12px var(--blue-glow)}
 /* alapalkin yhteyshenkilöt (CONTACT-osio) */
-.yhteys{margin-top:24px;padding-top:20px;border-top:1px solid rgba(140,170,210,.18)}
-.yhteys-otsikko{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:.22em;color:var(--muted);margin-bottom:14px}
-.yhteys-kortit{display:flex;gap:46px;row-gap:20px;flex-wrap:wrap}
-.yhteys-kortti{display:flex;flex-direction:column;gap:3px}
-.yhteys-kortti .yn{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:.08em;color:#fff}
-.yhteys-kortti .yr{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
-.yhteys-kortti a{color:var(--blue-bright);text-decoration:none;font-size:14px;letter-spacing:.03em}
+.yhteys{margin-top:26px;padding-top:22px;border-top:1px solid rgba(140,170,210,.18)}
+.yhteys-otsikko{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:17px;letter-spacing:.22em;color:var(--muted);margin-bottom:16px}
+.yhteys-kortit{display:flex;gap:64px;row-gap:24px;flex-wrap:wrap}
+.yhteys-kortti{display:flex;flex-direction:column;gap:5px}
+.yhteys-kortti .yn{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:24px;letter-spacing:.08em;color:#fff}
+.yhteys-kortti .yr{font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.yhteys-kortti a{color:var(--blue-bright);text-decoration:none;font-size:17px;letter-spacing:.03em}
 .yhteys-kortti a:hover{text-shadow:0 0 10px var(--blue-glow)}
 .socials{display:flex;gap:14px;padding-left:26px;border-left:1px solid rgba(140,170,210,.3)}
 .socials a{
