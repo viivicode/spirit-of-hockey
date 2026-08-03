@@ -267,11 +267,17 @@ nav.mainnav a.active::after{
      koska se edustaa leveää työpöytänäkymää. */
   table.stand .badge.badge-logo{
     width:min(var(--lpk,64px),46px);height:min(var(--lpk,64px),46px);
-    margin:calc((26px - min(var(--lpk,64px),46px)) / 3) 0;
+  }
+  table.stand tr.me td .team{
+    padding-left:calc(min(var(--lpk,64px),46px) + 10px);
+    min-height:calc(min(var(--lpk,64px),46px) * .72);
   }
   html.editori table.stand .badge.badge-logo{
     width:var(--lpk,64px);height:var(--lpk,64px);
-    margin:calc((26px - var(--lpk,64px)) / 3) 0;
+  }
+  html.editori table.stand tr.me td .team{
+    padding-left:calc(var(--lpk,64px) + 12px);
+    min-height:calc(var(--lpk,64px) * .72);
   }
 }
 
@@ -341,10 +347,18 @@ nav.mainnav a.active::after{
 /* oman joukkueen pallukassa näytetään Spiritin logo lyhenteen sijaan.
    Koko tulee sisällöstä (sarjataulukko.logoKoko → --lpk, oletus 64 px);
    miinusmarginaali estää rivin kasvamisen samassa suhteessa. */
+/* Logo on irrotettu rivin korkeuslaskennasta (absoluuttinen sijoittelu):
+   iso logo ei pullista riviä eikä työnnä nimeä kapeaksi, vaan kelluu
+   nimen vieressä ja saa ulottua hieman rivin reunojen yli. */
+tr.me td .team{
+  position:relative;
+  padding-left:calc(var(--lpk,64px) + 12px);
+  min-height:calc(var(--lpk,64px) * .72);
+}
 .badge.badge-logo{
+  position:absolute;left:0;top:50%;transform:translateY(-50%);
   width:var(--lpk,64px);height:var(--lpk,64px);
-  background:none;border-radius:0;box-shadow:none;padding:0;
-  margin:calc((26px - var(--lpk,64px)) / 3) 0;
+  background:none;border-radius:0;box-shadow:none;padding:0;margin:0;
   filter:drop-shadow(0 3px 8px rgba(0,0,0,.55));
 }
 .badge.badge-logo img{width:100%;height:100%;object-fit:contain;display:block}
@@ -507,6 +521,12 @@ footer{
   .panel-head{padding:10px 16px 10px 14px;gap:6px}
   .panel-head h3{font-size:clamp(13px,3.9vw,15.5px);letter-spacing:.01em}
   .panel-head a{font-size:clamp(9px,2.7vw,10px);letter-spacing:.01em}
+  /* kapeilla puhelimilla iso logopallukka rajataan 76 px:iin, ettei taulukko vuoda */
+  table.stand .badge.badge-logo{width:min(var(--lpk,64px),76px);height:min(var(--lpk,64px),76px)}
+  table.stand tr.me td .team{
+    padding-left:calc(min(var(--lpk,64px),76px) + 10px);
+    min-height:calc(min(var(--lpk,64px),76px) * .72);
+  }
 }
 </style>
 </head>
@@ -723,13 +743,14 @@ footer{
   /* e() suojaa sisällön erikoismerkit (< > & "), ettei tekstiin kirjoitettu
      merkki riko sivun rakennetta. Sisältö näkyy aina juuri niin kuin se on kirjoitettu. */
   const e = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  /* oman joukkueen pallukka: Spiritin logo (sisällön logo tai vakiotiedosto).
-     Koko sisällöstä (sarjataulukko.logoKoko), rajattu välille 20–120 px. */
+  /* oman joukkueen tunnus: Spiritin logo (sisällön logo tai vakiotiedosto).
+     Koko sisällöstä (sarjataulukko.logoKoko), rajattu välille 20–120 px —
+     --lpk asetetaan .team-elementille, jotta myös rivin mitoitus näkee sen. */
   const logoBadge = () => {
     const lk = (S.logo && S.logo.kuva) || 'spirit_of_hockey_logo.png';
-    const koko = Math.max(20, Math.min(120, +(S.sarjataulukko && S.sarjataulukko.logoKoko) || 64));
-    return '<span class="badge badge-logo" style="--lpk:'+koko+'px"><img src="'+e(lk)+'" alt=""></span>';
+    return '<span class="badge badge-logo"><img src="'+e(lk)+'" alt=""></span>';
   };
+  const logoKoko = Math.max(20, Math.min(120, +(S.sarjataulukko && S.sarjataulukko.logoKoko) || 64));
   const badge = (t,v1,v2) => {
     const dark = /^#e/i.test(v1); // vaalea pallukka -> tumma teksti
     return '<span class="badge" style="background:radial-gradient(circle at 35% 30%,'+e(v1)+','+e(v2)+')'+(dark?';color:#0b1c3e':'')+'">'+e(t)+'</span>';
@@ -831,7 +852,7 @@ footer{
   $('sarja-rivit').innerHTML = S.sarjataulukko.joukkueet.map(j =>
     '<tr'+(j.oma?' class="me"':'')+'>'+
       '<td class="c">'+e(j.sija)+'</td>'+
-      '<td><span class="team">'+(j.oma ? logoBadge() : badge(j.lyhenne,j.vari1,j.vari2))+e(j.nimi)+'</span></td>'+
+      '<td><span class="team"'+(j.oma ? ' style="--lpk:'+logoKoko+'px"' : '')+'>'+(j.oma ? logoBadge() : badge(j.lyhenne,j.vari1,j.vari2))+e(j.nimi)+'</span></td>'+
       '<td class="c">'+e(j.o)+'</td><td class="c">'+e(j.v)+'</td><td class="c">'+e(j.h)+'</td>'+
       '<td class="c">'+e(j.jv)+'</td><td class="c">'+e(j.p)+'</td>'+
     '</tr>').join('');
