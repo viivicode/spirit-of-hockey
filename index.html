@@ -462,6 +462,26 @@ table.stand td .team{display:flex;align-items:center;gap:8px;text-transform:uppe
 }
 
 /* ================= FOOTER ================= */
+
+/* ================= VALUES ================= */
+.arvoalue{margin-bottom:34px}
+.arvoalue .panel-head{padding:12px 9% 12px 26px}
+.arvotekstit{max-width:920px;margin:10px auto 6px;padding:0 14px}
+.arvotekstit p{
+  font-size:15.5px;line-height:1.8;color:var(--muted);font-weight:500;
+  letter-spacing:.02em;margin:0 0 18px;text-align:center;
+}
+.arvotekstit p:first-child{
+  font-family:'Saira Condensed',sans-serif;font-size:20px;line-height:1.55;
+  letter-spacing:.05em;color:#dbe6f3;font-weight:600;text-transform:none;
+}
+.arvotekstit p:last-child{margin-bottom:4px}
+/* hento hehkuviiva johdannon alla */
+.arvotekstit p:first-child::after{
+  content:"";display:block;width:120px;height:2px;margin:20px auto 0;
+  background:linear-gradient(90deg,transparent,var(--blue-glow),transparent);
+}
+
 footer{
   margin-top:10px;border-top:1px solid rgba(140,170,210,.25);
   background:linear-gradient(180deg,rgba(8,16,34,.9),rgba(4,9,20,.98));
@@ -687,6 +707,16 @@ footer{
         </a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="wrap arvoalue" id="values" style="display:none">
+  <div class="panel metal">
+    <div class="panel-head">
+      <h3 id="arvot-otsikko"></h3>
+    </div>
+    <div class="arvotekstit" id="arvot-tekstit"></div>
   </div>
 </section>
 
@@ -943,6 +973,31 @@ footer{
     };
   } else if(videoOsio){
     videoOsio.style.display = 'none';
+  }
+
+  /* VALUES-osio: valinnainen — vanha sisältö ilman arvot-osiota saa oletustekstit;
+     tyhjä kappalelista piilottaa koko osion */
+  {
+    const arvoOsio = document.getElementById('values');
+    if(arvoOsio){
+      const av = S.arvot || {
+        otsikko: 'VALUES',
+        kappaleet: [
+          { teksti: 'Spirit Of Hockey provides a training environment where bullying is not tolerated. Our values are rooted in sports and in understanding the meaning of sportsmanship.' },
+          { teksti: 'At Spirit, we believe that in addition to competitive values, sports can teach young people important life values, such as community, honesty, perseverance, respect, and appreciation for hard work.' },
+          { teksti: 'We believe that raising good athletes also raises good people. As an association, Spirit is committed to honest, open, and transparent operations.' },
+          { teksti: 'A key principle of Spirit is the sharing of knowledge and the appreciation of cooperation that moves the entire sports community forward.' }
+        ]
+      };
+      const kpl = (av.kappaleet || []).map(k => String((k && k.teksti) || '').trim()).filter(Boolean);
+      if(kpl.length){
+        arvoOsio.style.display = '';
+        $('arvot-otsikko').textContent = av.otsikko || 'VALUES';
+        $('arvot-tekstit').innerHTML = kpl.map(k => '<p>'+e(k)+'</p>').join('');
+      } else {
+        arvoOsio.style.display = 'none';
+      }
+    }
   }
 
   /* footer */
