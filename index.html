@@ -981,18 +981,18 @@ footer{
     const arvoOsio = document.getElementById('values');
     if(arvoOsio){
       const av = S.arvot || {
-        otsikko: 'VALUES',
+        otsikko: 'WHO WE ARE & OUR MISSION',
         kappaleet: [
-          { teksti: 'Spirit Of Hockey provides a training environment where bullying is not tolerated. Our values are rooted in sports and in understanding the meaning of sportsmanship.' },
-          { teksti: 'At Spirit, we believe that in addition to competitive values, sports can teach young people important life values, such as community, honesty, perseverance, respect, and appreciation for hard work.' },
-          { teksti: 'We believe that raising good athletes also raises good people. As an association, Spirit is committed to honest, open, and transparent operations.' },
-          { teksti: 'A key principle of Spirit is the sharing of knowledge and the appreciation of cooperation that moves the entire sports community forward.' }
+          { teksti: 'Spirit of Hockey is Finland’s only privately operated junior ice hockey club. We provide a safe, ambitious, and international training environment where bullying is never tolerated.' },
+          { teksti: 'Our values are rooted in sports and in understanding the true meaning of sportsmanship. We believe that, alongside competitive skills, sports can teach young people important values for life, including community, honesty, perseverance, respect, responsibility, and appreciation for hard work.' },
+          { teksti: 'We believe that developing good athletes also means developing good people. Our mission is to help young players grow both on and off the ice while providing them with the environment, support, and opportunities they need to reach their full potential.' },
+          { teksti: 'As an organization, Spirit of Hockey is committed to honest, open, and transparent operations. One of our key principles is sharing knowledge and building cooperation that helps move the entire hockey community forward.' }
         ]
       };
       const kpl = (av.kappaleet || []).map(k => String((k && k.teksti) || '').trim()).filter(Boolean);
       if(kpl.length){
         arvoOsio.style.display = '';
-        $('arvot-otsikko').textContent = av.otsikko || 'VALUES';
+        $('arvot-otsikko').textContent = av.otsikko || 'WHO WE ARE & OUR MISSION';
         $('arvot-tekstit').innerHTML = kpl.map(k => '<p>'+e(k)+'</p>').join('');
       } else {
         arvoOsio.style.display = 'none';
