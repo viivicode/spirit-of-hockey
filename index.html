@@ -465,7 +465,8 @@ table.stand td .team{display:flex;align-items:center;gap:8px;text-transform:uppe
 
 /* ================= VALUES ================= */
 .arvoalue{margin-bottom:34px}
-.arvoalue .panel-head{padding:12px 9% 12px 52px}
+/* otsikon vasen etäisyys säädettävissä editorissa (arvot.otsikkoSiirto) */
+.arvoalue .panel-head{padding:12px 9% 12px var(--aots,90px)}
 .arvotekstit{max-width:920px;margin:10px auto 6px;padding:0 14px}
 .arvotekstit p{
   font-size:15.5px;line-height:1.8;color:var(--muted);font-weight:500;
@@ -992,6 +993,9 @@ footer{
       const kpl = (av.kappaleet || []).map(k => String((k && k.teksti) || '').trim()).filter(Boolean);
       if(kpl.length){
         arvoOsio.style.display = '';
+        /* otsikon vasen etäisyys (px), säädettävissä editorissa; raja 0–400 */
+        const siirto = Math.max(0, Math.min(400, +(av.otsikkoSiirto) || 90));
+        arvoOsio.style.setProperty('--aots', siirto + 'px');
         $('arvot-otsikko').textContent = av.otsikko || 'WHO WE ARE & OUR MISSION';
         $('arvot-tekstit').innerHTML = kpl.map(k => '<p>'+e(k)+'</p>').join('');
       } else {
