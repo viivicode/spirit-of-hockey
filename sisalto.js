@@ -141,7 +141,7 @@ const SISALTO = {
   // Tyhjä osoite piilottaa koko osion. Token on julkinen selaintunnus (ptkn_).
   kauppa: {
     otsikko: "SHOP", linkkiTeksti: "VISIT SHOP ›",
-    osoite: "https://spirit-of-hockey-shop.fourthwall.com", token: "",
+    osoite: "https://spirit-of-hockey-shop.fourthwall.com", token: "41a77bcf-d731-4eb1-b5ed-418be05a3c0f",
     kokoelma: "all", maara: 4, valuutta: "EUR", otsikkoSiirto: 90,
     nappiTeksti: "VISIT SHOP", teksti: "Official Spirit of Hockey merch — wear the crest, back the team.",
     tuotteet: [
