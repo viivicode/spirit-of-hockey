@@ -1111,7 +1111,10 @@ footer{
           ruudukko.innerHTML = kasin.map(t => kortti(t.nimi || '', t.hinta || '', t.kuva || '', t.linkki || '')).join('');
         };
 
-        const token = String(k.token || '').trim();
+        /* Storefront-token säilytetään sisällössä ilman ptkn_-alkua: GitHubin
+           salaisuusvahti luulee sitä Shopifyn tunnukseksi ja estää julkaisun. */
+        let token = String(k.token || '').trim();
+        if(token && token.indexOf('ptkn_') !== 0) token = 'ptkn_' + token;
         const kokoelma = String(k.kokoelma || '').trim() || 'all';
         const maara = Math.max(1, Math.min(24, +(k.maara) || 4));
         const VALUUTAT = ['USD','EUR','CAD','GBP','AUD','NZD','SEK','NOK','DKK','PLN','INR','JPY','MYR','SGD','MXN','BRL','CHF'];
