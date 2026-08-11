@@ -137,18 +137,19 @@ const SISALTO = {
     ]
   },
 
-  // ---------- ALAPALKKI ----------
   // ---------- KAUPPA (Fourthwall) ----------
-  // Tyhja osoite piilottaa koko osion. Token on julkinen selaintunnus (ptkn_).
+  // Tyhjä osoite piilottaa koko osion. Token on julkinen selaintunnus (ptkn_).
   kauppa: {
-    otsikko: "SHOP", linkkiTeksti: "VISIT SHOP \u203A",
+    otsikko: "SHOP", linkkiTeksti: "VISIT SHOP ›",
     osoite: "https://spirit-of-hockey-shop.fourthwall.com", token: "",
-    kokoelma: "all", maara: 4, otsikkoSiirto: 90,
-    nappiTeksti: "VISIT SHOP", teksti: "Official Spirit of Hockey merch \u2014 wear the crest, back the team.",
+    kokoelma: "all", maara: 4, valuutta: "EUR", otsikkoSiirto: 90,
+    nappiTeksti: "VISIT SHOP", teksti: "Official Spirit of Hockey merch — wear the crest, back the team.",
     tuotteet: [
+
     ]
   },
 
+  // ---------- ALAPALKKI ----------
   footer: {
     nimi: "SPIRIT OF HOCKEY",
     kuvaus: "International U20 Hockey Program in Finland",
