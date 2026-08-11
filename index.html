@@ -480,6 +480,34 @@ table.stand td .team{display:flex;align-items:center;gap:8px;text-transform:uppe
 
 /* ================= FOOTER ================= */
 
+/* ================= SHOP (Fourthwall) ================= */
+.kauppaalue{margin-bottom:34px}
+.kauppaalue .panel-head{padding:12px 9% 12px var(--kots,90px)}
+.kauppa-teksti{
+  max-width:760px;margin:6px auto 18px;padding:0 14px;text-align:center;
+  font-size:15px;line-height:1.7;color:var(--muted);font-weight:500;letter-spacing:.02em;
+}
+.kauppa-tuotteet{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;margin-top:6px}
+.ktuote{
+  display:block;text-decoration:none;border-radius:14px;overflow:hidden;
+  border:1.5px solid transparent;
+  background:linear-gradient(180deg,#0f2148,#081226) padding-box,
+    linear-gradient(160deg,rgba(190,215,245,.75),rgba(60,95,150,.25) 45%,rgba(190,215,245,.55)) border-box;
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.ktuote:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.5),0 0 20px rgba(63,140,255,.28)}
+.ktuote-kuva{position:relative;aspect-ratio:1/1;overflow:hidden;background:radial-gradient(circle at 50% 25%,#1b3a72,#0a1a3a 70%)}
+.ktuote-kuva img{width:100%;height:100%;object-fit:cover;display:block}
+.ktuote-teksti{padding:11px 13px 13px}
+.ktuote-nimi{
+  font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:14.5px;letter-spacing:.06em;
+  color:#e5edf7;text-transform:uppercase;line-height:1.25;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.ktuote-hinta{margin-top:5px;font-size:14px;font-weight:700;color:#5fb0ff;letter-spacing:.04em}
+.kauppa-nappirivi{display:flex;justify-content:center;margin-top:22px}
+.kauppa-lataa{text-align:center;color:var(--muted);font-size:14px;padding:14px 0}
+
 /* ================= VALUES ================= */
 .arvoalue{margin-bottom:34px}
 /* otsikon vasen etäisyys säädettävissä editorissa (arvot.otsikkoSiirto) */
@@ -738,6 +766,21 @@ footer{
   </div>
 </section>
 
+<!-- SHOP (Fourthwall) -->
+<section class="wrap kauppaalue" id="shop" style="display:none">
+  <div class="panel metal">
+    <div class="panel-head">
+      <h3 id="kauppa-otsikko"></h3>
+      <a id="kauppa-linkki" href="#" target="_blank" rel="noopener"></a>
+    </div>
+    <p class="kauppa-teksti" id="kauppa-teksti" style="display:none"></p>
+    <div class="kauppa-tuotteet" id="kauppa-tuotteet"></div>
+    <div class="kauppa-nappirivi">
+      <a class="videonappi" id="kauppa-nappi" href="#" target="_blank" rel="noopener"></a>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer id="contact">
   <div class="wrap foot-row">
@@ -756,6 +799,9 @@ footer{
       </a>
       <a href="#" id="some-x" aria-label="X">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.7 3H21l-7.2 8.2L22.3 21h-6.6l-5.2-6.1L4.6 21H1.3l7.7-8.8L1.7 3h6.8l4.7 5.5Zm-1.2 16h1.8L7.5 4.9H5.6Z"/></svg>
+      </a>
+      <a href="#" id="some-kauppa" aria-label="Shop">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h2.2l2 10.5a1.6 1.6 0 0 0 1.6 1.3h8.3a1.6 1.6 0 0 0 1.6-1.3L20.5 9H6.2"/><circle cx="9.5" cy="20.2" r="1.2" fill="currentColor" stroke="none"/><circle cx="17" cy="20.2" r="1.2" fill="currentColor" stroke="none"/></svg>
       </a>
       <a href="#" id="some-sposti" aria-label="Email">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3.5 7 8.5 6.5L20.5 7"/></svg>
@@ -1021,6 +1067,78 @@ footer{
     }
   }
 
+  /* SHOP (Fourthwall) — valinnainen osio. Näkyy vain jos kaupan osoite on annettu
+     tai käsin lisättyjä tuotteita on. Tuotteet haetaan Fourthwallin Storefront
+     APIsta julkisella tokenilla; jos haku ei onnistu (esim. tokenia ei ole),
+     näytetään käsin lisätyt tuotteet ja aina nappi kauppaan. */
+  {
+    const kOsio = document.getElementById('shop');
+    if(kOsio){
+      const k = S.kauppa || {};
+      const osoite = String(k.osoite || '').trim();
+      const kasin = (k.tuotteet || []).filter(t => t && (t.nimi || t.kuva));
+      if(!osoite && !kasin.length){
+        kOsio.style.display = 'none';
+      } else {
+        kOsio.style.display = '';
+        kOsio.style.setProperty('--kots', Math.max(0, Math.min(400, +(k.otsikkoSiirto) || 90)) + 'px');
+        $('kauppa-otsikko').textContent = k.otsikko || 'SHOP';
+        const lk = $('kauppa-linkki');
+        if(osoite && k.linkkiTeksti){ lk.textContent = k.linkkiTeksti; lk.href = urli(osoite); lk.style.display = ''; }
+        else { lk.style.display = 'none'; }
+        const kt = $('kauppa-teksti');
+        if(k.teksti){ kt.textContent = k.teksti; kt.style.display = ''; } else { kt.style.display = 'none'; }
+        const nappi = $('kauppa-nappi');
+        if(osoite){
+          nappi.textContent = k.nappiTeksti || 'VISIT SHOP';
+          nappi.href = urli(osoite);
+          nappi.parentElement.style.display = '';
+        } else { nappi.parentElement.style.display = 'none'; }
+
+        const hintaTeksti = (arvo, valuutta) => {
+          if(arvo == null || arvo === '') return '';
+          try { return new Intl.NumberFormat('en-US', {style:'currency', currency: valuutta || 'EUR'}).format(arvo); }
+          catch(err){ return String(arvo) + (valuutta ? ' ' + valuutta : ''); }
+        };
+        const kortti = (nimi, hinta, kuva, linkki) =>
+          '<a class="ktuote" href="'+e(urli(linkki || osoite))+'" target="_blank" rel="noopener">'+
+            '<div class="ktuote-kuva">'+(kuva ? '<img src="'+e(kuva)+'" alt="'+e(nimi)+'" loading="lazy">' : '')+'</div>'+
+            '<div class="ktuote-teksti"><div class="ktuote-nimi">'+e(nimi)+'</div>'+
+            (hinta ? '<div class="ktuote-hinta">'+e(hinta)+'</div>' : '')+
+          '</div></a>';
+        const ruudukko = $('kauppa-tuotteet');
+        const naytaKasin = () => {
+          ruudukko.innerHTML = kasin.map(t => kortti(t.nimi || '', t.hinta || '', t.kuva || '', t.linkki || '')).join('');
+        };
+
+        const token = String(k.token || '').trim();
+        const kokoelma = String(k.kokoelma || '').trim() || 'all';
+        const maara = Math.max(1, Math.min(24, +(k.maara) || 4));
+        if(token && osoite){
+          ruudukko.innerHTML = '<div class="kauppa-lataa">Loading products…</div>';
+          fetch('https://storefront-api.fourthwall.com/v1/collections/'+encodeURIComponent(kokoelma)+
+                '/products?storefront_token='+encodeURIComponent(token))
+            .then(v => v.ok ? v.json() : Promise.reject(v.status))
+            .then(d => {
+              const lista = (d && d.results) || [];
+              if(!lista.length) throw new Error('ei tuotteita');
+              const juuri = osoite.replace(/\/+$/, '');
+              ruudukko.innerHTML = lista.slice(0, maara).map(t => {
+                const v = (t.variants && t.variants[0]) || {};
+                const p = v.unitPrice || {};
+                const kuva = (t.images && t.images[0] && t.images[0].url) || '';
+                return kortti(t.name || '', hintaTeksti(p.value, p.currency), kuva,
+                              t.slug ? juuri + '/products/' + t.slug : juuri);
+              }).join('');
+            })
+            .catch(() => { naytaKasin(); });
+        } else {
+          naytaKasin();
+        }
+      }
+    }
+  }
+
   /* footer */
   $('footer-nimi').textContent = S.footer.nimi;
   $('footer-kuvaus').textContent = S.footer.kuvaus;
@@ -1041,6 +1159,8 @@ footer{
   someKuvake('some-instagram', S.footer.some.instagram, urli(S.footer.some.instagram));
   someKuvake('some-youtube', S.footer.some.youtube, urli(S.footer.some.youtube));
   someKuvake('some-x', S.footer.some.x, urli(S.footer.some.x));
+  someKuvake('some-kauppa', (S.kauppa && S.kauppa.osoite) || S.footer.some.kauppa,
+             urli((S.kauppa && S.kauppa.osoite) || S.footer.some.kauppa || ''));
   someKuvake('some-sposti', S.footer.some.sahkoposti, 'mailto:'+S.footer.some.sahkoposti);
 
   /* yhteyshenkilöt (CONTACT-osio alapalkissa) — vanha sisalto.js ilman
