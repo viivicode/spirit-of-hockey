@@ -508,6 +508,85 @@ table.stand td .team{display:flex;align-items:center;gap:8px;text-transform:uppe
 .kauppa-nappirivi{display:flex;justify-content:center;margin-top:22px}
 .kauppa-lataa{text-align:center;color:var(--muted);font-size:14px;padding:14px 0}
 
+/* ================= LIVE COMMENTARY ================= */
+.selostusalue{margin-bottom:34px}
+.selostusalue .panel-head{padding:12px 9% 12px var(--sots,90px)}
+.sel-tila{
+  font-family:'Saira Condensed',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+}
+.sel-tila::before{
+  content:"";width:9px;height:9px;border-radius:50%;
+  background:#4a5b74;box-shadow:none;
+}
+.sel-tila.live{color:#ff6b6b}
+.sel-tila.live::before{background:#ff4d4d;box-shadow:0 0 10px rgba(255,77,77,.9);animation:selsyke 1.6s ease-in-out infinite}
+@keyframes selsyke{0%,100%{opacity:1}50%{opacity:.35}}
+.sel-teksti{
+  max-width:760px;margin:6px auto 16px;padding:0 14px;text-align:center;
+  font-size:15px;line-height:1.7;color:var(--muted);font-weight:500;letter-spacing:.02em;
+}
+.sel-teksti b{color:#dbe6f3}
+.sel-ohjaus{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+  gap:18px;margin:4px auto 6px;padding:0 14px;
+}
+.sel-nappi{
+  display:inline-flex;align-items:center;gap:10px;cursor:pointer;
+  font-family:'Saira Condensed',sans-serif;font-size:16px;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;color:#fff;
+  padding:12px 26px;border-radius:12px;border:1.5px solid transparent;
+  background:linear-gradient(180deg,#1a3f7d,#0d2350) padding-box,
+    linear-gradient(160deg,rgba(190,215,245,.8),rgba(60,95,150,.3) 45%,rgba(190,215,245,.6)) border-box;
+  box-shadow:0 6px 18px rgba(0,0,0,.45),0 0 18px rgba(63,140,255,.22);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.sel-nappi:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.5),0 0 24px rgba(63,140,255,.36)}
+.sel-nappi[disabled]{opacity:.5;cursor:default;transform:none}
+.sel-nappi .merkki{font-size:13px;line-height:1}
+.sel-saadin{display:flex;align-items:center;gap:10px;min-width:230px}
+.sel-saadin label{
+  font-family:'Saira Condensed',sans-serif;font-size:12.5px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;
+}
+.sel-saadin b{color:#5fb0ff;font-size:13.5px}
+.sel-saadin input[type=range]{flex:1;min-width:110px;accent-color:#3f8cff}
+.sel-tv{
+  font-family:'Saira Condensed',sans-serif;font-size:14px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;color:#5fb0ff;text-decoration:none;
+  border-bottom:1px solid rgba(95,176,255,.5);
+}
+.sel-tv:hover{color:#9dd0ff;border-bottom-color:rgba(157,208,255,.8)}
+.sel-ohje{
+  max-width:620px;margin:16px auto 2px;padding:0 14px 0 34px;
+  color:var(--muted);font-size:14px;line-height:1.75;letter-spacing:.02em;
+}
+.sel-ohje li{margin:0 0 4px}
+.sel-tallenteet{max-width:760px;margin:18px auto 0;padding:0 14px}
+.sel-tallenteet h4{
+  font-family:'Saira Condensed',sans-serif;font-size:14px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:#cfe0f5;
+  margin:0 0 10px;text-align:center;
+}
+.sel-tallenne{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:9px 14px;margin-bottom:8px;border-radius:11px;
+  border:1px solid rgba(120,160,215,.28);background:rgba(10,26,58,.55);
+}
+.sel-tallenne .nimi{font-size:14px;color:#e5edf7;font-weight:600;letter-spacing:.02em}
+.sel-tallenne .pvm{font-size:12.5px;color:var(--muted);letter-spacing:.04em}
+.sel-tallenne a{
+  font-family:'Saira Condensed',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;color:#5fb0ff;text-decoration:none;white-space:nowrap;
+}
+.sel-tallenne a:hover{color:#9dd0ff}
+@media (max-width:560px){
+  .sel-ohjaus{gap:13px}
+  .sel-saadin{min-width:0;width:100%}
+  .sel-tallenne{flex-wrap:wrap;gap:6px}
+}
+
 /* ================= VALUES ================= */
 .arvoalue{margin-bottom:34px}
 /* otsikon vasen etäisyys säädettävissä editorissa (arvot.otsikkoSiirto) */
@@ -666,6 +745,7 @@ footer{
         <h4 id="info1-otsikko"></h4>
         <p><b id="info1-r1"></b><br><span id="info1-r2"></span><br><span id="info1-r3"></span></p>
         <a id="info1-tvlinkki" class="tvlinkki" target="_blank" rel="noopener" style="display:none"></a>
+        <a id="info1-selostuslinkki" class="tvlinkki" href="#commentary" style="display:none"></a>
       </div>
     </div>
     <div class="cell">
@@ -753,6 +833,31 @@ footer{
         </a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- LIVE COMMENTARY (oma äänivirta) -->
+<section class="wrap selostusalue" id="commentary" style="display:none">
+  <div class="panel metal">
+    <div class="panel-head">
+      <h3 id="selostus-otsikko"></h3>
+      <span class="sel-tila" id="selostus-tila"></span>
+    </div>
+    <p class="sel-teksti" id="selostus-teksti" style="display:none"></p>
+    <div class="sel-ohjaus">
+      <button class="sel-nappi" id="selostus-nappi" type="button">
+        <span class="merkki" id="selostus-merkki">▶</span><span id="selostus-nappiteksti"></span>
+      </button>
+      <div class="sel-saadin" id="selostus-saadin">
+        <label for="selostus-viive">Sync <b id="selostus-viive-arvo">0 s</b></label>
+        <input id="selostus-viive" type="range" min="0" max="60" step="1" value="0"
+               aria-label="Delay the commentary to match the video">
+      </div>
+      <a class="sel-tv" id="selostus-tv" target="_blank" rel="noopener" style="display:none"></a>
+    </div>
+    <ol class="sel-ohje" id="selostus-ohje"></ol>
+    <div class="sel-tallenteet" id="selostus-tallenteet" style="display:none"></div>
+    <audio id="selostus-audio" crossorigin="anonymous" preload="none"></audio>
   </div>
 </section>
 
@@ -950,6 +1055,16 @@ footer{
     const mEl = $('info1-tvlinkki');
     if(mTeksti){ mEl.textContent = mTeksti; mEl.href = urli(mLinkki); mEl.style.display = 'inline-block'; }
     else mEl.style.display = 'none';
+    /* Selostuslinkki NEXT GAME -laatikkoon: vie sivun LIVE COMMENTARY -osioon.
+       Näkyy vain kun selostuksen äänivirta on käytössä. */
+    const sEl = $('info1-selostuslinkki');
+    const sl = S.selostus || {};
+    if(sEl){
+      if(String(sl.osoite || '').trim() && (sl.laatikkoTeksti === undefined || sl.laatikkoTeksti)){
+        sEl.textContent = sl.laatikkoTeksti || 'LISTEN TO LIVE COMMENTARY ›';
+        sEl.style.display = 'inline-block';
+      } else sEl.style.display = 'none';
+    }
   }
   $('info2-otsikko').textContent=i.viimeisinTulos.otsikko;
   $('info2-r1').textContent=i.viimeisinTulos.rivi1; $('info2-r2').textContent=i.viimeisinTulos.rivi2; $('info2-r3').textContent=i.viimeisinTulos.rivi3;
@@ -1063,6 +1178,157 @@ footer{
         $('arvot-tekstit').innerHTML = kpl.map(k => '<p>'+e(k)+'</p>').join('');
       } else {
         arvoOsio.style.display = 'none';
+      }
+    }
+  }
+
+  /* LIVE COMMENTARY — valinnainen osio. Näkyy vain jos äänivirran osoite on
+     annettu (tai tallenteita on). Fani katsoo kuvan Leijonat.tv:stä ja kuuntelee
+     selostuksen täältä; koska kuvan ja äänen viive eroaa, soittimessa on
+     synkkaussäädin joka viivyttää ääntä Web Audion DelayNodella (0–60 s).
+     Jos Web Audio ei ole käytettävissä, ääni soi ilman viivettä eikä sivu rikkoudu. */
+  {
+    const sOsio = document.getElementById('commentary');
+    if(sOsio){
+      const sl = S.selostus || {};
+      const virta = String(sl.osoite || '').trim();
+      const tallenteet = (sl.tallenteet || []).filter(t => t && t.osoite && t.nimi);
+      if(!virta && !tallenteet.length){
+        sOsio.style.display = 'none';
+      } else {
+        sOsio.style.display = '';
+        sOsio.style.setProperty('--sots', Math.max(0, Math.min(400, +(sl.otsikkoSiirto) || 90)) + 'px');
+        $('selostus-otsikko').textContent = sl.otsikko || 'LIVE COMMENTARY';
+        const st = $('selostus-teksti');
+        if(sl.teksti){ st.textContent = sl.teksti; st.style.display = ''; } else { st.style.display = 'none'; }
+
+        const tv = $('selostus-tv');
+        if(sl.tvTeksti && sl.tvLinkki){
+          tv.textContent = sl.tvTeksti; tv.href = urli(sl.tvLinkki); tv.style.display = '';
+        } else { tv.style.display = 'none'; }
+
+        const ohjeet = (sl.ohjeet || []).map(o => String((o && o.teksti) || '').trim()).filter(Boolean);
+        $('selostus-ohje').innerHTML = ohjeet.map(o => '<li>'+e(o)+'</li>').join('');
+        $('selostus-ohje').style.display = ohjeet.length ? '' : 'none';
+
+        const tEl = $('selostus-tallenteet');
+        if(tallenteet.length){
+          tEl.innerHTML = '<h4>'+e(sl.tallenneOtsikko || 'PAST GAMES')+'</h4>' +
+            tallenteet.map(t =>
+              '<div class="sel-tallenne"><div><div class="nimi">'+e(t.nimi)+'</div>'+
+              (t.pvm ? '<div class="pvm">'+e(t.pvm)+'</div>' : '')+'</div>'+
+              '<a href="'+e(urli(t.osoite))+'" target="_blank" rel="noopener">LISTEN ›</a></div>').join('');
+          tEl.style.display = '';
+        } else { tEl.style.display = 'none'; }
+
+        const nappi  = $('selostus-nappi');
+        const merkki = $('selostus-merkki');
+        const nteksti = $('selostus-nappiteksti');
+        const tila   = $('selostus-tila');
+        const aani   = $('selostus-audio');
+        const saadin = $('selostus-saadin');
+        const liuku  = $('selostus-viive');
+        const arvo   = $('selostus-viive-arvo');
+        const tekstiSoita = sl.nappiTeksti || 'LISTEN LIVE';
+        const tekstiStop  = sl.stopTeksti  || 'STOP';
+
+        if(!virta){
+          /* pelkät tallenteet: soitin ja säädin piiloon */
+          nappi.style.display = 'none'; saadin.style.display = 'none'; tila.style.display = 'none';
+        } else {
+          nappi.style.display = ''; saadin.style.display = ''; tila.style.display = '';
+          nteksti.textContent = tekstiSoita;
+          aani.src = urli(virta);
+
+          /* --- viive (Web Audio) --- */
+          let actx = null, viiveSolmu = null, kytketty = false;
+          const teeKetju = () => {
+            if(kytketty) return true;
+            try {
+              const AC = window.AudioContext || window.webkitAudioContext;
+              if(!AC) return false;
+              actx = new AC();
+              const lahde = actx.createMediaElementSource(aani);
+              viiveSolmu = actx.createDelay(61);
+              viiveSolmu.delayTime.value = (+liuku.value || 0);
+              lahde.connect(viiveSolmu); viiveSolmu.connect(actx.destination);
+              kytketty = true;
+              return true;
+            } catch(err){ kytketty = false; return false; }
+          };
+          const paivitaViive = () => {
+            const v = Math.max(0, Math.min(60, +liuku.value || 0));
+            arvo.textContent = v + ' s';
+            if(viiveSolmu){
+              try { viiveSolmu.delayTime.setTargetAtTime(v, actx.currentTime, .05); }
+              catch(err){ viiveSolmu.delayTime.value = v; }
+            }
+          };
+          liuku.addEventListener('input', paivitaViive);
+          paivitaViive();
+
+          const asetaTila = (paalla, teksti) => {
+            tila.classList.toggle('live', !!paalla);
+            tila.textContent = teksti;
+          };
+          asetaTila(false, sl.offlineTeksti || 'OFFLINE');
+
+          nappi.addEventListener('click', () => {
+            if(!aani.paused){
+              aani.pause();
+              merkki.textContent = '▶'; nteksti.textContent = tekstiSoita;
+              asetaTila(false, sl.offlineTeksti || 'OFFLINE');
+              return;
+            }
+            teeKetju();
+            if(actx && actx.state === 'suspended'){ try { actx.resume(); } catch(err){} }
+            /* live-virta: aloita aina uusimmasta kohdasta */
+            try { aani.load(); } catch(err){}
+            asetaTila(false, sl.yhdistaaTeksti || 'CONNECTING…');
+            nappi.disabled = true;
+            const p = aani.play();
+            if(p && p.catch) p.catch(() => {
+              nappi.disabled = false;
+              merkki.textContent = '▶'; nteksti.textContent = tekstiSoita;
+              asetaTila(false, sl.eiLahetystaTeksti || 'NOT BROADCASTING');
+            });
+          });
+
+          aani.addEventListener('playing', () => {
+            nappi.disabled = false;
+            merkki.textContent = '■'; nteksti.textContent = tekstiStop;
+            asetaTila(true, sl.liveTeksti || 'LIVE');
+          });
+          aani.addEventListener('error', () => {
+            nappi.disabled = false;
+            merkki.textContent = '▶'; nteksti.textContent = tekstiSoita;
+            asetaTila(false, sl.eiLahetystaTeksti || 'NOT BROADCASTING');
+          });
+          aani.addEventListener('ended', () => {
+            merkki.textContent = '▶'; nteksti.textContent = tekstiSoita;
+            asetaTila(false, sl.offlineTeksti || 'OFFLINE');
+          });
+
+          /* Icecastin status-json kertoo onko lähetys päällä ennen kuin
+             kuuntelija painaa nappia. Valinnainen: ilman osoitetta tila
+             näkyy vasta soiton alkaessa. */
+          const tilaOsoite = String(sl.tilaOsoite || '').trim();
+          if(tilaOsoite){
+            const tarkista = () => {
+              fetch(urli(tilaOsoite), {cache:'no-store'})
+                .then(v => v.ok ? v.json() : Promise.reject(v.status))
+                .then(d => {
+                  const s = d && d.icestats && d.icestats.source;
+                  const paalla = !!s && (!Array.isArray(s) || s.length > 0);
+                  if(aani.paused) asetaTila(paalla, paalla ? (sl.liveTeksti || 'LIVE')
+                                                          : (sl.offlineTeksti || 'OFFLINE'));
+                })
+                .catch(() => {});
+            };
+            tarkista();
+            setInterval(tarkista, 30000);
+          }
+        }
       }
     }
   }
