@@ -154,6 +154,27 @@ const SISALTO = {
   },
 
   // ---------- ALAPALKKI ----------
+  // ---------- SELOSTUS (LIVE COMMENTARY) ----------
+  // Tyhjä osoite piilottaa osion (tallenteet näkyvät silti, jos niitä on).
+  selostus: {
+    otsikko: "LIVE COMMENTARY", otsikkoSiirto: 90,
+    osoite: "https://aani.aiboksi.com/spirit.mp3", tilaOsoite: "https://aani.aiboksi.com/status-json.xsl",
+    teksti: "Live English commentary on Spirit games by Ian — watch the video on Leijonat.tv and listen here.",
+    nappiTeksti: "LISTEN LIVE", stopTeksti: "STOP",
+    liveTeksti: "LIVE", offlineTeksti: "OFFLINE",
+    yhdistaaTeksti: "CONNECTING…", eiLahetystaTeksti: "NOT BROADCASTING",
+    laatikkoTeksti: "LISTEN TO LIVE COMMENTARY ›",
+    tvTeksti: "WATCH ON LEIJONAT.TV ›", tvLinkki: "https://www.leijonat.tv",
+    tallenneOtsikko: "PAST GAMES",
+    ohjeet: [
+      { teksti: "Open the game on Leijonat.tv in another tab and mute the stream." },
+      { teksti: "Press LISTEN LIVE here." },
+      { teksti: "Slide Sync until the commentary matches the play on screen." }
+    ],
+    tallenteet: [
+    ]
+  },
+
   footer: {
     nimi: "SPIRIT OF HOCKEY",
     kuvaus: "International U20 Hockey Program in Finland",
