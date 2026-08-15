@@ -67,7 +67,10 @@ const SISALTO = {
     linkkiTeksti: "FULL SCHEDULE ›",
     linkki: "#schedule",
     lista: [
-      { pvm: "AUG 15", lyhenne: "GrIFK", vari1: "#2b5cb8", vari2: "#0e1f44", vastustaja: "vs. GrIFK Grankulla", aika: "18:30 EEST", halli: "KAUNIAINEN" }
+      { pvm: "AUG 15", lyhenne: "GrIFK", vari1: "#2b5cb8", vari2: "#0e1f44", vastustaja: "vs. GrIFK Grankulla", aika: "18:30 EEST", halli: "KAUNIAINEN" },
+      { pvm: "AUG 21", lyhenne: "S-K", vari1: "#2b5cb8", vari2: "#0e1f44", vastustaja: "vs. S-Kiekko", aika: "19:00 EEST", halli: "Seinäjoki" },
+      { pvm: "AUG 22", lyhenne: "S-K", vari1: "#2b5cb8", vari2: "#0e1f44", vastustaja: "vs. S-Kiekko", aika: "14:30 EEST", halli: "Seinäjoki" },
+      { pvm: "AUG 30", lyhenne: "JYS", vari1: "#2b5cb8", vari2: "#0e1f44", vastustaja: "vs. Jyske", aika: "16:00 EEST", halli: "Laitila" }
     ]
   },
 
@@ -140,20 +143,6 @@ const SISALTO = {
     ]
   },
 
-  // ---------- KAUPPA (Fourthwall) ----------
-  // Tyhjä osoite piilottaa koko osion. Token on Fourthwallin julkinen
-  // selaintunnus, tallennettuna ilman alkuliitettä (sivupohja lisää sen).
-  kauppa: {
-    otsikko: "SHOP", linkkiTeksti: "VISIT SHOP ›",
-    osoite: "https://spirit-of-hockey-shop.fourthwall.com", token: "41a77bcf-d731-4eb1-b5ed-418be05a3c0f",
-    kokoelma: "all", maara: 6, valuutta: "EUR", otsikkoSiirto: 110,
-    nappiTeksti: "VISIT SHOP", teksti: "Official Spirit of Hockey merch — wear the crest, back the team.",
-    tuotteet: [
-
-    ]
-  },
-
-  // ---------- ALAPALKKI ----------
   // ---------- SELOSTUS (LIVE COMMENTARY) ----------
   // Tyhjä osoite piilottaa osion (tallenteet näkyvät silti, jos niitä on).
   selostus: {
@@ -172,9 +161,24 @@ const SISALTO = {
       { teksti: "Slide Sync until the commentary matches the play on screen." }
     ],
     tallenteet: [
+
     ]
   },
 
+  // ---------- KAUPPA (Fourthwall) ----------
+  // Tyhjä osoite piilottaa koko osion. Token on Fourthwallin julkinen
+  // selaintunnus, tallennettuna ilman alkuliitettä (sivupohja lisää sen).
+  kauppa: {
+    otsikko: "SHOP", linkkiTeksti: "VISIT SHOP ›",
+    osoite: "https://spirit-of-hockey-shop.fourthwall.com", token: "41a77bcf-d731-4eb1-b5ed-418be05a3c0f",
+    kokoelma: "all", maara: 6, valuutta: "EUR", otsikkoSiirto: 110,
+    nappiTeksti: "VISIT SHOP", teksti: "Official Spirit of Hockey merch — wear the crest, back the team.",
+    tuotteet: [
+
+    ]
+  },
+
+  // ---------- ALAPALKKI ----------
   footer: {
     nimi: "SPIRIT OF HOCKEY",
     kuvaus: "International U20 Hockey Program in Finland",
