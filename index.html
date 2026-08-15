@@ -270,7 +270,9 @@ nav.mainnav a.active::after{
 .panel{border-radius:18px;padding:20px 20px 22px}
 .panel-head{
   display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;
-  padding:12px 40px 12px 32px;
+  /* kuten ottelurivissä: otsikkopalkin kromiviiste venyy leveyden mukana,
+     joten oikea täyte on prosentteina (vähintään entinen 40 px). */
+  padding:12px max(40px, 6.5%) 12px 32px;
   background:url("ui-panel-header.png") no-repeat;
   background-size:100% 100%;
 }
@@ -286,7 +288,7 @@ nav.mainnav a.active::after{
 /* kapea työpöytäväli (3 paneelia rinnakkain mutta vähän tilaa):
    otsikot ja linkit hieman pienemmiksi, ettei teksti vuoda palkin viisteen yli */
 @media (max-width:1380px) and (min-width:1201px){
-  .panel-head{padding:11px 20px 11px 24px;gap:6px}
+  .panel-head{padding:11px max(20px, 6.4%) 11px 24px;gap:6px}
   .panel-head h3{font-size:15.5px;letter-spacing:.03em}
   .panel-head a{font-size:10.5px;letter-spacing:.02em}
   /* navipalkki vuoti oikealta tässä välissä (mitattu 17 px @1240) */
@@ -365,7 +367,11 @@ nav.mainnav a.active::after{
   display:grid;grid-template-columns:52px 26px minmax(0,1fr) 62px 84px;align-items:center;gap:8px;
   background:url("ui-row.png") no-repeat;
   background-size:100% 100%;
-  border-radius:10px;padding:13px 18px;
+  border-radius:10px;
+  /* Oikea täyte on prosentteina, koska taustakuvan kromikärki venyy rivin
+     leveyden mukana (background-size:100% 100%). Kiinteällä 18 px:llä
+     hallin nimi osui kärkeen leveillä riveillä. Vasen reuna on suora → 18 px. */
+  padding:13px max(24px, 4.5%) 13px 18px;
 }
 .srow:hover{filter:brightness(1.18) drop-shadow(0 0 10px rgba(63,140,255,.35))}
 .srow .d{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;color:#cfe0f5}
@@ -676,7 +682,8 @@ footer{
   .panel-head{padding:11px 26px 11px 18px;gap:8px}
   .panel-head h3{font-size:17px;letter-spacing:.04em}
   .panel-head a{font-size:11px;letter-spacing:.03em}
-  .srow{grid-template-columns:46px 24px minmax(0,1fr) 58px;padding:11px 12px;gap:7px}
+  .srow{grid-template-columns:46px 24px minmax(0,1fr) 58px;
+        padding:11px max(16px, 4.5%) 11px 12px;gap:7px}
   .srow .a{display:none}
   .hero{padding:30px 18px 50px;min-height:auto}
   .hero-title{font-size:clamp(46px,13vw,74px)}
