@@ -396,6 +396,16 @@ tr.me td .team{
   filter:drop-shadow(0 3px 8px rgba(0,0,0,.55));
 }
 .badge.badge-logo img{width:100%;height:100%;object-fit:contain;display:block}
+/* Ottelurivin vastustajan logo. Kuva piirretään 34 px:nä ja vedetään
+   miinusmarginaalilla takaisin 26 px:iin, eli se vie ruudukossa täsmälleen
+   saman tilan kuin värillinen pallukka — rivin mitattu asettelu ei muutu
+   (52/26/1fr/62/84, kapeana 46/24/1fr/58). */
+.srow .badge.badge-kuva{
+  width:34px;height:34px;margin:-4px;
+  background:none;border-radius:0;box-shadow:none;
+  filter:drop-shadow(0 2px 5px rgba(0,0,0,.55));
+}
+.srow .badge.badge-kuva img{width:100%;height:100%;object-fit:contain;display:block}
 
 /* standings */
 table.stand{width:100%;border-collapse:separate;border-spacing:0 7px}
@@ -994,6 +1004,13 @@ footer{
     const dark = /^#e/i.test(v1); // vaalea pallukka -> tumma teksti
     return '<span class="badge" style="background:radial-gradient(circle at 35% 30%,'+e(v1)+','+e(v2)+')'+(dark?';color:#0b1c3e':'')+'">'+e(t)+'</span>';
   };
+  /* Ottelurivin pallukka: jos vastustajalle on annettu logo, näytetään se
+     värillisen lyhennepallukan sijaan. Tyhjä logo = entinen ulkoasu. */
+  const otteluBadge = o => {
+    const logo = String((o && o.logo) || '').trim();
+    if(!logo) return badge(o.lyhenne, o.vari1, o.vari2);
+    return '<span class="badge badge-kuva"><img src="'+e(logo)+'" alt="'+e(o.lyhenne || o.vastustaja || '')+'" loading="lazy"></span>';
+  };
   const oletusKuva = () =>
     '<svg class="photo" viewBox="0 0 120 122" xmlns="http://www.w3.org/2000/svg">'+
     '<rect width="120" height="122" fill="#0e2148"/>'+
@@ -1106,7 +1123,7 @@ footer{
   $('ottelut-lista').innerHTML = S.ottelut.lista.map(o =>
     '<div class="srow">'+
       '<span class="d">'+e(o.pvm)+'</span>'+
-      badge(o.lyhenne,o.vari1,o.vari2)+
+      otteluBadge(o)+
       '<span class="opp">'+e(o.vastustaja)+'</span>'+
       '<span class="t">'+e(o.aika)+'</span>'+
       '<span class="a">'+e(o.halli)+'</span>'+
