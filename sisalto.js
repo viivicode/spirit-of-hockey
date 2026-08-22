@@ -146,11 +146,11 @@ const SISALTO = {
   selostus: {
     otsikko: "LIVE COMMENTARY", otsikkoSiirto: 90,
     osoite: "https://aani.aiboksi.com/spirit.mp3", tilaOsoite: "https://aani.aiboksi.com/status-json.xsl",
-    teksti: "No commentary for the GrIFK Grankulla game on August 15 — live English commentary by Ian starts from our next game. Watch the video on Leijonat.tv and listen here.",
+    teksti: "Live English commentary by Ian starts at the Jyske game on August 30 — watch the video on Leijonat.tv and listen here.",
     nappiTeksti: "LISTEN LIVE", stopTeksti: "STOP",
     liveTeksti: "LIVE", offlineTeksti: "OFFLINE",
     yhdistaaTeksti: "CONNECTING…", eiLahetystaTeksti: "NOT BROADCASTING",
-    laatikkoTeksti: "COMMENTARY STARTS NEXT GAME ›",
+    laatikkoTeksti: "COMMENTARY STARTS AUG 30 ›",
     tvTeksti: "WATCH ON LEIJONAT.TV ›", tvLinkki: "https://www.leijonat.tv",
     tallenneOtsikko: "PAST GAMES",
     ohjeet: [
