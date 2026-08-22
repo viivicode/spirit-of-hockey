@@ -1018,6 +1018,57 @@ footer{
     if(!logo) return badge(o.lyhenne, o.vari1, o.vari2);
     return '<span class="badge badge-kuva"><img src="'+e(logo)+'" alt="'+e(o.lyhenne || o.vastustaja || '')+'" loading="lazy"></span>';
   };
+  /* --- Otteluohjelman automaattinen päivitys ------------------------------
+     Sisällössä on vain "AUG 30" ja "16:00 EEST" — vuosi puuttuu, joten se
+     päätellään: valitaan vuosi jolla ottelu osuu lähimmäs nykyhetkeä (yli 60
+     vrk menneisyydessä -> seuraava vuosi). Pelattu ottelu katoaa ohjelmasta ja
+     NEXT GAME -laatikko täyttyy seuraavasta ottelusta.
+     Editorissa (html.editori) listaa EI suodateta, jotta rivien järjestys ja
+     raahaus vastaavat sisällön indeksejä. */
+  const KUUKAUDET = {JAN:0,FEB:1,MAR:2,APR:3,MAY:4,JUN:5,JUL:6,AUG:7,SEP:8,OCT:9,NOV:10,DEC:11};
+  const VYOHYKKEET = {EEST:180,EET:120,CEST:120,CET:60,BST:60,UTC:0,GMT:0,Z:0};
+  const otteluAika = o => {
+    const pm = String((o && o.pvm) || '').trim().toUpperCase().match(/([A-Z]{3})\s*(\d{1,2})/);
+    if(!pm || !(pm[1] in KUUKAUDET)) return null;
+    const kk = KUUKAUDET[pm[1]], pv = +pm[2];
+    const a = String((o && o.aika) || '').trim().toUpperCase();
+    const ka = a.match(/(\d{1,2})[:.](\d{2})/);
+    const tt = ka ? +ka[1] : 0, mm = ka ? +ka[2] : 0;
+    let siirto = null;
+    const kirjain = a.match(/([A-Z]{1,4})\s*$/);
+    if(kirjain && kirjain[1] in VYOHYKKEET) siirto = VYOHYKKEET[kirjain[1]];
+    if(siirto === null){
+      const ks = a.match(/([+-])(\d{1,2}):?(\d{2})?/);
+      if(ks) siirto = (ks[1] === '-' ? -1 : 1) * (+ks[2] * 60 + (+ks[3] || 0));
+    }
+    const tee = v => siirto === null
+      ? new Date(v, kk, pv, tt, mm, 0, 0).getTime()
+      : Date.UTC(v, kk, pv, tt, mm, 0, 0) - siirto * 60000;
+    const nyt = Date.now(), vrk = 86400000;
+    let vuosi = new Date().getFullYear(), ms = tee(vuosi);
+    if(ms < nyt - 60 * vrk){ vuosi += 1; ms = tee(vuosi); }
+    else if(ms > nyt + 300 * vrk){ vuosi -= 1; ms = tee(vuosi); }
+    return { ms: ms, vuosi: vuosi };
+  };
+  const otteluAsetukset = S.ottelut || {};
+  const autoOttelut = otteluAsetukset.automaatti !== false;
+  const otteluKesto = Math.max(0, Math.min(24, +otteluAsetukset.kesto || 3)) * 3600000;
+  const nytMs = Date.now();
+  const editorissa = document.documentElement.classList.contains('editori');
+  const kaikkiOttelut = otteluAsetukset.lista || [];
+  const kesken = o => { const a = otteluAika(o); return a === null || a.ms + otteluKesto > nytMs; };
+  let nakyvatOttelut = kaikkiOttelut;
+  if(autoOttelut && !editorissa){
+    const jaljella = kaikkiOttelut.filter(kesken);
+    if(jaljella.length) nakyvatOttelut = jaljella;  /* kaikki pelattu -> ei tyhjennetä paneelia */
+  }
+  /* seuraava ottelu = aikaisin vielä pelaamaton, listan järjestyksestä riippumatta */
+  let seuraavaOttelu = null;
+  if(autoOttelut) kaikkiOttelut.forEach(o => {
+    const a = otteluAika(o);
+    if(a === null || a.ms + otteluKesto <= nytMs) return;
+    if(!seuraavaOttelu || a.ms < seuraavaOttelu.ms) seuraavaOttelu = { o: o, ms: a.ms, vuosi: a.vuosi };
+  });
   const oletusKuva = () =>
     '<svg class="photo" viewBox="0 0 120 122" xmlns="http://www.w3.org/2000/svg">'+
     '<rect width="120" height="122" fill="#0e2148"/>'+
@@ -1069,7 +1120,21 @@ footer{
   /* infopalkki */
   const i = S.infopalkki;
   $('info1-otsikko').textContent=i.seuraavaPeli.otsikko;
-  $('info1-r1').textContent=i.seuraavaPeli.rivi1; $('info1-r2').textContent=i.seuraavaPeli.rivi2; $('info1-r3').textContent=i.seuraavaPeli.rivi3;
+  /* NEXT GAME: automaattitilassa tiedot tulevat otteluohjelman seuraavasta
+     ottelusta. Jos tulevia otteluita ei ole, käytetään käsin kirjoitettuja rivejä. */
+  {
+    let r1 = i.seuraavaPeli.rivi1, r2 = i.seuraavaPeli.rivi2, r3 = i.seuraavaPeli.rivi3;
+    if(seuraavaOttelu){
+      const so = seuraavaOttelu.o;
+      const nimi = String(so.vastustaja || '').trim();
+      if(nimi) r1 = /^(vs\.|@)/i.test(nimi) ? nimi : 'vs. ' + nimi;
+      const pvm = String(so.pvm || '').trim(), aika = String(so.aika || '').trim();
+      if(pvm) r2 = pvm + ', ' + seuraavaOttelu.vuosi + (aika ? ' \u2022 ' + aika : '');
+      const halli = String(so.halli || '').trim();
+      if(halli) r3 = halli.toUpperCase();
+    }
+    $('info1-r1').textContent = r1; $('info1-r2').textContent = r2; $('info1-r3').textContent = r3;
+  }
   /* Leijonat.tv-mainos: valinnainen — vanha sisältö ilman kenttiä saa oletukset,
      tyhjäksi muokattu teksti piilottaa linkin kokonaan */
   {
@@ -1127,7 +1192,7 @@ footer{
   /* ottelut */
   $('ottelut-otsikko').textContent = S.ottelut.otsikko;
   const ol = $('ottelut-linkki'); ol.textContent = S.ottelut.linkkiTeksti; ol.href = urli(S.ottelut.linkki);
-  $('ottelut-lista').innerHTML = S.ottelut.lista.map(o =>
+  $('ottelut-lista').innerHTML = nakyvatOttelut.map(o =>
     '<div class="srow">'+
       '<span class="d">'+e(o.pvm)+'</span>'+
       otteluBadge(o)+
