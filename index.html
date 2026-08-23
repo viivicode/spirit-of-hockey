@@ -638,6 +638,68 @@ table.stand td .team{display:flex;align-items:center;gap:8px;text-transform:uppe
   background:linear-gradient(90deg,transparent,var(--blue-glow),transparent);
 }
 
+/* ================= NEWS ================= */
+.uutisalue{margin-bottom:34px}
+/* otsikon vasen etäisyys säädettävissä editorissa (uutiset.otsikkoSiirto) */
+.uutisalue .panel-head{padding:12px 9% 12px var(--uots,90px)}
+/* auto-fit: yksi juttu levittyy koko paneelin leveydelle, kolme jakautuu kolmeen palstaan */
+.jutut{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:16px;margin-top:4px}
+/* leveällä kortilla teksti ei veny liian pitkiksi riveiksi */
+.juttu-teksti{max-width:760px}
+.juttu{
+  display:flex;flex-direction:column;text-align:left;cursor:pointer;
+  border:1.5px solid transparent;border-radius:14px;overflow:hidden;
+  background:linear-gradient(180deg,#102450,#0a1631) padding-box,
+             linear-gradient(160deg,#8ea0b8,#33405a,#b9c5d4) border-box;
+  box-shadow:0 10px 24px rgba(0,0,0,.5);
+  transition:transform .14s ease, box-shadow .14s ease;
+}
+.juttu:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.6),0 0 18px rgba(63,140,255,.3)}
+.juttu:focus-visible{outline:2px solid var(--blue-bright);outline-offset:3px}
+.juttu-kuva{aspect-ratio:16/9;background:#0b1730;overflow:hidden;flex:0 0 auto}
+.juttu-kuva img{width:100%;height:100%;object-fit:cover;display:block}
+.juttu-teksti{padding:14px 16px 16px;display:flex;flex-direction:column;gap:7px;flex:1}
+.juttu-pvm{
+  font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:11.5px;
+  letter-spacing:.14em;color:var(--blue-bright);text-transform:uppercase;
+}
+.juttu-otsikko{
+  font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:19px;line-height:1.2;
+  color:#fff;letter-spacing:.02em;
+}
+.juttu-ingressi{font-size:13.5px;line-height:1.55;color:var(--muted);flex:1}
+.juttu-lue{
+  font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:12px;
+  letter-spacing:.1em;color:var(--blue-bright);text-transform:uppercase;
+}
+/* koko juttu omassa ikkunassa (sama kromikehys kuin pelaajasivulla) */
+.juttu-iso{max-width:820px;max-height:88vh;overflow-y:auto}
+.juttu-iso .ji-kuva{border-radius:12px;overflow:hidden;margin:0 0 16px;background:#0b1730}
+.juttu-iso .ji-kuva img{width:100%;display:block}
+.juttu-iso .ji-pvm{
+  font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:12px;
+  letter-spacing:.14em;color:var(--blue-bright);text-transform:uppercase;margin-bottom:6px;
+}
+.juttu-iso h3{
+  font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:29px;line-height:1.12;
+  letter-spacing:.03em;color:#fff;margin-bottom:10px;
+}
+.juttu-iso .ji-ingressi{
+  font-family:'Saira Condensed',sans-serif;font-size:18px;line-height:1.5;
+  letter-spacing:.03em;color:#dbe6f3;font-weight:600;margin-bottom:18px;
+}
+.juttu-iso .ji-teksti p{font-size:15px;line-height:1.75;color:var(--muted);margin:0 0 16px}
+.juttu-iso .ji-teksti h4{
+  font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:19px;letter-spacing:.06em;
+  color:#fff;text-transform:uppercase;margin:26px 0 10px;
+}
+.juttu-iso .ji-teksti ul{margin:0 0 16px;padding-left:20px}
+.juttu-iso .ji-teksti li{font-size:15px;line-height:1.7;color:var(--muted);margin-bottom:5px}
+@media (max-width:560px){
+  .juttu-iso h3{font-size:23px}
+  .juttu-iso .ji-ingressi{font-size:16px}
+}
+
 footer{
   margin-top:10px;border-top:1px solid rgba(140,170,210,.25);
   background:linear-gradient(180deg,rgba(8,16,34,.9),rgba(4,9,20,.98));
@@ -849,6 +911,17 @@ footer{
 </section>
 
 <!-- LATEST VIDEO (täytetään sisalto.js:stä) -->
+<!-- NEWS (piilossa kunnes sisallossa on juttuja) -->
+<section class="wrap uutisalue" id="news" style="display:none">
+  <div class="panel metal">
+    <div class="panel-head">
+      <h3 id="uutiset-otsikko"></h3>
+      <a id="uutiset-linkki" href="#news" style="display:none"></a>
+    </div>
+    <div class="jutut" id="uutiset-lista"></div>
+  </div>
+</section>
+
 <section class="wrap videoalue">
   <div class="panel metal" id="video">
     <div class="panel-head">
@@ -994,6 +1067,14 @@ footer{
 </div>
 
 <!-- PELAAJAN OMA SIVU (täytetään pelaajakortin klikkauksesta, ks. renderöintiskripti) -->
+<!-- KOKO JUTTU (taytetaan juttukortin klikkauksesta) -->
+<div class="haku-tausta" id="juttu-tausta">
+  <div class="haku metal juttu-iso" role="dialog" aria-modal="true">
+    <button type="button" class="haku-sulje" id="juttu-sulje" aria-label="Close">✕</button>
+    <div id="juttu-sisalto"></div>
+  </div>
+</div>
+
 <div class="haku-tausta" id="pelaaja-tausta">
   <div class="haku metal pelaaja-kortti-iso" role="dialog" aria-modal="true">
     <button type="button" class="haku-sulje" id="pelaaja-sulje" aria-label="Close">✕</button>
@@ -1250,6 +1331,46 @@ footer{
       '<td class="c">'+e(j.o)+'</td><td class="c">'+e(j.v)+'</td><td class="c">'+e(j.h)+'</td>'+
       '<td class="c">'+e(j.jv)+'</td><td class="c">'+e(j.p)+'</td>'+
     '</tr>').join('');
+
+  /* NEWS — valinnainen osio. Tyhjä juttulista piilottaa koko osion.
+     Jutun teksti kirjoitetaan editorissa tavallisena tekstinä:
+     tyhjä rivi erottaa kappaleet, "## " tekee väliotsikon ja "- " luettelon. */
+  {
+    const uutisOsio = $('news');
+    if(uutisOsio){
+      const uu = S.uutiset || {};
+      const kaikki = uu.jutut || [];
+      const parit = kaikki.map((j, i) => ({ j: j, i: i }))
+        .filter(x => x.j && String(x.j.otsikko || '').trim());
+      if(parit.length){
+        uutisOsio.style.display = '';
+        uutisOsio.style.setProperty('--uots',
+          Math.max(0, Math.min(400, +(uu.otsikkoSiirto) || 90)) + 'px');
+        $('uutiset-otsikko').textContent = uu.otsikko || 'NEWS';
+        const ul = $('uutiset-linkki');
+        if(ul){
+          if(String(uu.linkkiTeksti || '').trim()){
+            ul.textContent = uu.linkkiTeksti; ul.href = urli(uu.linkki); ul.style.display = '';
+          } else ul.style.display = 'none';
+        }
+        const maara = Math.max(1, Math.min(24, +(uu.maara) || 3));
+        $('uutiset-lista').innerHTML = parit.slice(0, maara).map(({j, i}) =>
+          '<article class="juttu" data-j="'+i+'" tabindex="0" role="button">'+
+            (String(j.kuva || '').trim()
+              ? '<div class="juttu-kuva"><img src="'+e(j.kuva)+'" alt="" loading="lazy"></div>' : '')+
+            '<div class="juttu-teksti">'+
+              (String(j.pvm || '').trim() ? '<div class="juttu-pvm">'+e(j.pvm)+'</div>' : '')+
+              '<h4 class="juttu-otsikko">'+e(j.otsikko)+'</h4>'+
+              (String(j.ingressi || '').trim()
+                ? '<p class="juttu-ingressi">'+e(j.ingressi)+'</p>' : '')+
+              '<span class="juttu-lue">'+e(uu.lueTeksti || 'READ THE STORY ›')+'</span>'+
+            '</div>'+
+          '</article>').join('');
+      } else {
+        uutisOsio.style.display = 'none';
+      }
+    }
+  }
 
   /* uusin video */
   const videoOsio = document.querySelector('.videoalue');
@@ -1633,6 +1754,60 @@ footer{
             '<span class="pi-play">▶</span></div>').join('')+'</div>';
       })();
   };
+  /* Jutun teksti HTML:ksi: tyhjä rivi = uusi kappale, "## " = väliotsikko,
+     "- " = luettelon kohta. Kaikki teksti suojataan e():llä. */
+  const juttuHtml = teksti => {
+    const rivit = String(teksti == null ? '' : teksti).replace(/\r/g, '').split('\n');
+    let ulos = '', kappale = [], lista = [];
+    const kappaleValmis = () => { if(kappale.length){ ulos += '<p>'+e(kappale.join(' '))+'</p>'; kappale = []; } };
+    const listaValmis = () => {
+      if(lista.length){ ulos += '<ul>'+lista.map(x => '<li>'+e(x)+'</li>').join('')+'</ul>'; lista = []; }
+    };
+    rivit.forEach(rivi => {
+      const t = rivi.trim();
+      if(!t){ kappaleValmis(); listaValmis(); return; }
+      if(t.indexOf('## ') === 0){ kappaleValmis(); listaValmis(); ulos += '<h4>'+e(t.slice(3).trim())+'</h4>'; return; }
+      if(t.indexOf('- ') === 0){ kappaleValmis(); lista.push(t.slice(2).trim()); return; }
+      listaValmis(); kappale.push(t);
+    });
+    kappaleValmis(); listaValmis();
+    return ulos;
+  };
+  const juttuSivu = j =>
+    (String(j.kuva || '').trim() ? '<div class="ji-kuva"><img src="'+e(j.kuva)+'" alt=""></div>' : '')+
+    (String(j.pvm || '').trim() ? '<div class="ji-pvm">'+e(j.pvm)+'</div>' : '')+
+    '<h3>'+e(j.otsikko || '')+'</h3>'+
+    (String(j.ingressi || '').trim() ? '<p class="ji-ingressi">'+e(j.ingressi)+'</p>' : '')+
+    '<div class="ji-teksti">'+juttuHtml(j.teksti)+'</div>';
+  if(!window.__juttuAlustettu){
+    window.__juttuAlustettu = true;
+    const jTausta = $('juttu-tausta');
+    if(jTausta){
+      const jSulje = () => jTausta.classList.remove('auki');
+      const avaa = kortti => {
+        const sis = (window.SISALTO || S);
+        const j = sis.uutiset && sis.uutiset.jutut && sis.uutiset.jutut[+kortti.getAttribute('data-j')];
+        if(!j) return;
+        $('juttu-sisalto').innerHTML = juttuSivu(j);
+        jTausta.classList.add('auki');
+        jTausta.scrollTop = 0;
+      };
+      document.addEventListener('click', ev => {
+        if(document.getElementById('ed-tyyli')) return; /* editorin esikatselu */
+        const k = ev.target && ev.target.closest ? ev.target.closest('.juttu') : null;
+        if(k) avaa(k);
+      });
+      document.addEventListener('keydown', ev => {
+        if(ev.key !== 'Enter' || document.getElementById('ed-tyyli')) return;
+        const k = document.activeElement && document.activeElement.closest
+          ? document.activeElement.closest('.juttu') : null;
+        if(k){ ev.preventDefault(); avaa(k); }
+      });
+      $('juttu-sulje').addEventListener('click', jSulje);
+      jTausta.addEventListener('click', ev => { if(ev.target === jTausta) jSulje(); });
+      document.addEventListener('keydown', ev => { if(ev.key === 'Escape') jSulje(); });
+    }
+  }
   if(!window.__pelaajaAlustettu){
     window.__pelaajaAlustettu = true;
     const pTausta = $('pelaaja-tausta');
