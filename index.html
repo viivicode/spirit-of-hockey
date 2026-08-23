@@ -474,6 +474,11 @@ table.stand td .team{display:flex;align-items:center;gap:8px;text-transform:uppe
   background:rgba(4,10,25,.85);border:1px solid rgba(140,170,210,.35);
   border-radius:6px;padding:3px 8px;font-size:12px;font-weight:700;letter-spacing:.06em;color:#dbe6f3;
 }
+/* Hakulomakkeen video: sama ruutu kuin etusivun videossa, mutta pienempi
+   toistonappi ja marginaali selosteen ja lomakkeen väliin. Tyhjä video = piilossa. */
+.haku .haku-video{margin:0 0 18px}
+.haku .haku-video .toista{width:60px;height:60px}
+.haku .haku-video .toista span{font-size:22px;margin-left:4px}
 .videoteksti h4{
   font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:22px;line-height:1.15;
   letter-spacing:.03em;color:#fff;text-transform:uppercase;margin-bottom:12px;
@@ -940,6 +945,7 @@ footer{
     <button type="button" class="haku-sulje" id="haku-sulje" aria-label="Close">✕</button>
     <h3 class="chrome" id="haku-otsikko">ROSTER APPLICATION</h3>
     <p class="haku-seloste">Fill in your details. Pressing <b>Send application</b> opens your email app with the application ready — just hit send.</p>
+    <div class="videoruutu haku-video" id="haku-video" style="display:none"></div>
     <form id="haku-lomake">
       <div><label for="haku-nimi">Full name</label><input id="haku-nimi" name="nimi" required autocomplete="name"></div>
       <div class="haku-rivit">
@@ -1628,12 +1634,49 @@ footer{
   const hakuAsetus = () => {
     const h = (window.SISALTO && window.SISALTO.hakemus) || S.hakemus || {};
     return { sposti: h.sposti || 'eetu.kilpi@spiritofhockey.fi',
-             otsikko: h.otsikko || 'ROSTER APPLICATION' };
+             otsikko: h.otsikko || 'ROSTER APPLICATION',
+             video: h.video || '' };
+  };
+  /* Aloituskohta YouTube-osoitteesta: t=1s, t=90, t=1m30s tai start=90 */
+  const ytAlku = u => {
+    const m = String(u == null ? '' : u).match(/[?&#](?:t|start)=([0-9hms]+)/i);
+    if(!m) return 0;
+    const a = m[1].toLowerCase();
+    if(/^\d+$/.test(a)) return +a;
+    const o = a.match(/(\d+)h/), min = a.match(/(\d+)m/), sek = a.match(/(\d+)s/);
+    return (o ? +o[1]*3600 : 0) + (min ? +min[1]*60 : 0) + (sek ? +sek[1] : 0);
   };
   const hakuTausta = $('haku-tausta');
   if(hakuTausta){
     const ha = hakuAsetus();
     $('haku-otsikko').textContent = ha.otsikko;
+    /* valinnainen esittelyvideo lomakkeen ylaosassa */
+    {
+      const hv = $('haku-video'), hid = ytTunnus(ha.video);
+      if(hv){
+        if(hid){
+          const alku = ytAlku(ha.video);
+          hv.style.display = '';
+          hv.classList.remove('soi');
+          hv.innerHTML =
+            '<img src="https://i.ytimg.com/vi/'+hid+'/maxresdefault.jpg" alt="" loading="lazy" '+
+            'onerror="this.src=\'https://i.ytimg.com/vi/'+hid+'/hqdefault.jpg\'">'+
+            '<div class="toista"><span>\u25b6</span></div>';
+          hv.onclick = () => {
+            hv.classList.add('soi');
+            hv.innerHTML =
+              '<iframe src="https://www.youtube-nocookie.com/embed/'+hid+
+              '?autoplay=1&rel=0'+(alku ? '&start='+alku : '')+'" '+
+              'title="'+e(ha.otsikko)+'" allow="accelerometer; autoplay; clipboard-write; '+
+              'encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+          };
+        } else {
+          hv.style.display = 'none';
+          hv.innerHTML = '';
+          hv.onclick = null;
+        }
+      }
+    }
     [['haku-sposti-linkki'],['haku-sposti-linkki2']].forEach(([id])=>{
       const sl = $(id);
       if(sl){ sl.textContent = ha.sposti; sl.href = 'mailto:'+ha.sposti; }
