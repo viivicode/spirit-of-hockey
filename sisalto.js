@@ -115,7 +115,8 @@ const SISALTO = {
   // sposti = osoite johon hakemukset lähetetään.
   hakemus: {
     otsikko: "ROSTER APPLICATION",
-    sposti: "eetu.kilpi@spiritofhockey.fi"
+    sposti: "eetu.kilpi@spiritofhockey.fi",
+    video: "https://www.youtube.com/watch?v=HNEFMz0PuEQ&t=1s"
   },
 
   // ---------- YHTEYSTIEDOT (alapalkin CONTACT-osio) ----------
