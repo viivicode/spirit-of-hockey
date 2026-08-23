@@ -1659,7 +1659,9 @@ footer{
           hv.style.display = '';
           hv.classList.remove('soi');
           hv.innerHTML =
-            '<img src="https://i.ytimg.com/vi/'+hid+'/maxresdefault.jpg" alt="" loading="lazy" '+
+            /* ei loading="lazy": modaali on piilossa sivun latautuessa, jolloin
+               laiska kuva ei lataudu koskaan edes modaalin auettua */
+            '<img src="https://i.ytimg.com/vi/'+hid+'/maxresdefault.jpg" alt="" '+
             'onerror="this.src=\'https://i.ytimg.com/vi/'+hid+'/hqdefault.jpg\'">'+
             '<div class="toista"><span>\u25b6</span></div>';
           hv.onclick = () => {
