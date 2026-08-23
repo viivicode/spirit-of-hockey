@@ -1197,12 +1197,23 @@ footer{
   const pelaajaOsio = $('team');
   const paneelit = document.querySelector('.panels');
   const pelaajaLista = (S.pelaajat && S.pelaajat.lista) || [];
+  /* Pelaajakortit numerojärjestykseen. Järjestys on vain esitystapa: sisällön
+     lista pysyy ennallaan ja kortin data-i osoittaa yhä oikeaan pelaajaan,
+     jotta pelaajan oma sivu avautuu oikein. Numeroton pelaaja menee loppuun.
+     Editorissa (html.editori) EI järjestetä, jotta esikatselun rivien
+     järjestys ja raahaus vastaavat sisällön indeksejä. */
+  const jarjestaPelaajat = (S.pelaajat && S.pelaajat.jarjesta) !== false;
+  const pelaajaParit = pelaajaLista.map((p, i) => ({ p: p, i: i }));
+  if(jarjestaPelaajat && !editorissa){
+    const nro = x => { const n = parseInt(x.p && x.p.numero, 10); return isFinite(n) ? n : Infinity; };
+    pelaajaParit.sort((a, b) => nro(a) - nro(b) || a.i - b.i);
+  }
   if(pelaajaLista.length){
     if(pelaajaOsio) pelaajaOsio.style.display = '';
     if(paneelit) paneelit.classList.remove('ei-pelaajia');
     $('pelaajat-otsikko').textContent = S.pelaajat.otsikko;
     const pl = $('pelaajat-linkki'); pl.textContent = S.pelaajat.linkkiTeksti; pl.href = urli(S.pelaajat.linkki);
-    $('pelaajat-lista').innerHTML = pelaajaLista.map((p, pi) =>
+    $('pelaajat-lista').innerHTML = pelaajaParit.map(({p, i: pi}) =>
       '<div class="pcard" data-i="'+pi+'" title="'+e(p.nimi)+'">'+
         '<span class="num">'+e(p.numero)+'</span>'+
         '<span class="flag-top"><span class="flag '+e(p.lippu)+'"></span></span>'+
