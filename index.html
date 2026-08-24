@@ -638,6 +638,41 @@ table.stand td .team{display:flex;align-items:center;gap:8px;text-transform:uppe
   background:linear-gradient(90deg,transparent,var(--blue-glow),transparent);
 }
 
+/* ================= PELAAJIEN PUOLI ================= */
+.pelaajaalue{margin-bottom:34px}
+.pelaajaalue .panel-head{padding:12px 9% 12px var(--pots,90px)}
+.pa-seloste{color:var(--muted);font-size:14.5px;line-height:1.6;margin:6px 0 16px;max-width:720px}
+.pa-lukko{display:flex;gap:10px;flex-wrap:wrap;align-items:center;max-width:520px}
+.pa-lukko input{
+  flex:1 1 220px;background:rgba(8,17,40,.85);border:1px solid #2a3157;border-radius:9px;
+  color:#fff;padding:11px 12px;font:inherit;font-size:15px;
+}
+.pa-lukko input:focus{outline:2px solid var(--blue-bright);border-color:transparent}
+.pa-nappi{
+  cursor:pointer;border:0;color:#fff;white-space:nowrap;
+  font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:16px;letter-spacing:.08em;
+  padding:12px 26px;background:url("ui-cta-button.png") no-repeat;background-size:100% 100%;
+  filter:drop-shadow(0 6px 14px rgba(0,0,0,.5));
+}
+.pa-nappi:hover{filter:drop-shadow(0 6px 14px rgba(0,0,0,.6)) drop-shadow(0 0 12px rgba(63,140,255,.45))}
+.pa-virhe{color:#ff9c9c;font-size:13.5px;margin-top:10px;display:none}
+.pa-virhe.nakyy{display:block}
+.pa-videot{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:6px}
+.pa-video{display:flex;flex-direction:column;gap:8px}
+.pa-ruutu{
+  position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;cursor:pointer;
+  border:1px solid rgba(130,160,200,.3);background:#000;
+}
+.pa-ruutu img{width:100%;height:100%;object-fit:cover;display:block;opacity:.85;transition:opacity .15s}
+.pa-ruutu:hover img{opacity:1}
+.pa-ruutu iframe{width:100%;height:100%;border:0;display:block}
+.pa-ruutu .pi-play{pointer-events:none}
+.pa-nimi{font-weight:700;font-size:13.5px;color:#fff;line-height:1.3}
+.pa-pvm{
+  font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:11.5px;
+  letter-spacing:.12em;color:var(--blue-bright);text-transform:uppercase;
+}
+
 /* ================= NEWS ================= */
 .uutisalue{margin-bottom:34px}
 /* otsikon vasen etäisyys säädettävissä editorissa (uutiset.otsikkoSiirto) */
@@ -988,6 +1023,22 @@ footer{
     <div class="kauppa-nappirivi">
       <a class="videonappi" id="kauppa-nappi" href="#" target="_blank" rel="noopener"></a>
     </div>
+  </div>
+</section>
+
+<!-- PELAAJIEN PUOLI (piilossa kunnes sisallossa on salasana ja videoita) -->
+<section class="wrap pelaajaalue" id="playersarea" style="display:none">
+  <div class="panel metal">
+    <div class="panel-head">
+      <h3 id="pa-otsikko"></h3>
+    </div>
+    <p class="pa-seloste" id="pa-seloste"></p>
+    <form class="pa-lukko" id="pa-lomake" autocomplete="off">
+      <input id="pa-salasana" type="password" autocomplete="current-password" aria-label="Password">
+      <button type="submit" class="pa-nappi" id="pa-nappi"></button>
+    </form>
+    <p class="pa-virhe" id="pa-virhe"></p>
+    <div class="pa-videot" id="pa-videot" style="display:none"></div>
   </div>
 </section>
 
@@ -1754,6 +1805,134 @@ footer{
             '<span class="pi-play">▶</span></div>').join('')+'</div>';
       })();
   };
+  /* SHA-256. Käytetään selaimen omaa toteutusta kun se on käytettävissä
+     (vaatii suojatun yhteyden); muuten pieni oma toteutus, jotta lukko toimii
+     myös http-esikatselussa ja testeissä. */
+  const sha256 = async teksti => {
+    const data = new TextEncoder().encode(String(teksti));
+    if(typeof crypto !== 'undefined' && crypto.subtle && crypto.subtle.digest){
+      try{
+        const t = await crypto.subtle.digest('SHA-256', data);
+        return [...new Uint8Array(t)].map(b => b.toString(16).padStart(2, '0')).join('');
+      }catch(err){}
+    }
+    const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+      0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+      0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+      0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+      0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+      0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+      0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+      0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+    let H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+    const pit = data.length, bitit = pit * 8;
+    const kokoBlokit = ((pit + 9 + 63) >> 6);
+    const M = new Uint8Array(kokoBlokit * 64);
+    M.set(data); M[pit] = 0x80;
+    new DataView(M.buffer).setUint32(M.length - 4, bitit >>> 0);
+    new DataView(M.buffer).setUint32(M.length - 8, Math.floor(bitit / 4294967296));
+    const kierto = (x, n) => (x >>> n) | (x << (32 - n));
+    const w = new Uint32Array(64), nakyma = new DataView(M.buffer);
+    for(let b = 0; b < kokoBlokit; b++){
+      for(let i = 0; i < 16; i++) w[i] = nakyma.getUint32(b * 64 + i * 4);
+      for(let i = 16; i < 64; i++){
+        const s0 = kierto(w[i-15],7) ^ kierto(w[i-15],18) ^ (w[i-15] >>> 3);
+        const s1 = kierto(w[i-2],17) ^ kierto(w[i-2],19) ^ (w[i-2] >>> 10);
+        w[i] = (w[i-16] + s0 + w[i-7] + s1) >>> 0;
+      }
+      let [a,bb,c,d,e2,f,g,h] = H;
+      for(let i = 0; i < 64; i++){
+        const S1 = kierto(e2,6) ^ kierto(e2,11) ^ kierto(e2,25);
+        const ch = (e2 & f) ^ (~e2 & g);
+        const t1 = (h + S1 + ch + K[i] + w[i]) >>> 0;
+        const S0 = kierto(a,2) ^ kierto(a,13) ^ kierto(a,22);
+        const maj = (a & bb) ^ (a & c) ^ (bb & c);
+        const t2 = (S0 + maj) >>> 0;
+        h = g; g = f; f = e2; e2 = (d + t1) >>> 0; d = c; c = bb; bb = a; a = (t1 + t2) >>> 0;
+      }
+      H = [H[0]+a, H[1]+bb, H[2]+c, H[3]+d, H[4]+e2, H[5]+f, H[6]+g, H[7]+h].map(x => x >>> 0);
+    }
+    return H.map(x => x.toString(16).padStart(8, '0')).join('');
+  };
+
+  /* PELAAJIEN PUOLI — kevyt salasanalukko pelien tallenteille.
+     HUOM: tämä pitää satunnaiset kävijät pois, mutta EI ole vahva suojaus:
+     videotunnukset ovat sivun lähdekoodissa. Varsinainen suoja on se, että
+     videot ovat YouTubessa piilotettuja (unlisted). Itse salasanaa ei
+     tallenneta sisältöön, vaan siitä lasketaan SHA-256-tiiviste. */
+  {
+    const paOsio = $('playersarea');
+    if(paOsio){
+      const pa = S.pelaajaosio || {};
+      const videot = (pa.videot || [])
+        .map(v => ({ id: ytTunnus(v && v.videoId), o: (v && v.otsikko) || '', p: (v && v.pvm) || '' }))
+        .filter(v => v.id);
+      const tiiviste = String(pa.salasanaTiiviste || '').trim().toLowerCase();
+      if(tiiviste && videot.length){
+        paOsio.style.display = '';
+        paOsio.style.setProperty('--pots',
+          Math.max(0, Math.min(400, +(pa.otsikkoSiirto) || 90)) + 'px');
+        $('pa-otsikko').textContent = pa.otsikko || "PLAYERS' AREA";
+        const sel = $('pa-seloste');
+        sel.textContent = pa.teksti || '';
+        sel.style.display = pa.teksti ? '' : 'none';
+        $('pa-nappi').textContent = pa.nappiTeksti || 'ENTER';
+        const virhe = $('pa-virhe');
+        virhe.textContent = pa.virheTeksti || 'Wrong password — please try again.';
+        const ruudukko = $('pa-videot');
+        const naytaVideot = () => {
+          $('pa-lomake').style.display = 'none';
+          virhe.classList.remove('nakyy');
+          ruudukko.style.display = '';
+          ruudukko.innerHTML = videot.map(v =>
+            '<div class="pa-video">'+
+              '<div class="pa-ruutu" data-yt="'+e(v.id)+'">'+
+                '<img src="https://i.ytimg.com/vi/'+e(v.id)+'/hqdefault.jpg" alt="">'+
+                '<span class="pi-play">▶</span>'+
+              '</div>'+
+              (v.p ? '<span class="pa-pvm">'+e(v.p)+'</span>' : '')+
+              (v.o ? '<span class="pa-nimi">'+e(v.o)+'</span>' : '')+
+            '</div>').join('');
+        };
+        /* sama selainistunto muistaa avauksen, ettei salasanaa tarvitse
+           näppäillä jokaisella sivunlatauksella */
+        let avattu = false;
+        try{ avattu = sessionStorage.getItem('spirit-pa') === tiiviste; }catch(err){}
+        if(avattu) naytaVideot();
+        if(!window.__paAlustettu){
+          window.__paAlustettu = true;
+          $('pa-lomake').addEventListener('submit', async ev => {
+            ev.preventDefault();
+            if(document.getElementById('ed-tyyli')) return; /* editorin esikatselu */
+            const kentta = $('pa-salasana');
+            const annettu = (kentta.value || '').trim();
+            let hash = '';
+            try{ hash = await sha256(annettu); }catch(err){}
+            const oikea = String((window.SISALTO || S).pelaajaosio.salasanaTiiviste || '').trim().toLowerCase();
+            if(hash && hash === oikea){
+              try{ sessionStorage.setItem('spirit-pa', oikea); }catch(err){}
+              kentta.value = '';
+              naytaVideot();
+            } else {
+              virhe.classList.add('nakyy');
+              kentta.select();
+            }
+          });
+          $('pa-videot').addEventListener('click', ev => {
+            const r = ev.target && ev.target.closest ? ev.target.closest('.pa-ruutu') : null;
+            if(!r || r.querySelector('iframe')) return;
+            const id = r.getAttribute('data-yt');
+            if(!/^[A-Za-z0-9_-]{11}$/.test(id || '')) return;
+            r.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/'+id+
+              '?autoplay=1&rel=0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+          });
+        }
+      } else {
+        paOsio.style.display = 'none';
+      }
+    }
+  }
+
   /* Jutun teksti HTML:ksi: tyhjä rivi = uusi kappale, "## " = väliotsikko,
      "- " = luettelon kohta. Kaikki teksti suojataan e():llä. */
   const juttuHtml = teksti => {
