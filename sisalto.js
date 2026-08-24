@@ -163,7 +163,7 @@ const SISALTO = {
     virheTeksti: "Wrong password — please try again.",
     salasanaTiiviste: "6e1bd58295f37962db4f0f1631f73a7ab96ca4df95a993af8b3a0f94523ef2f8",
     videot: [
-
+      { pvm: "22.8.2026", otsikko: "S-Kiekko 6-7 22082026", videoId: "https://youtu.be/JMwojoqr-dw" }
     ]
   },
 
