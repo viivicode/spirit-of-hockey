@@ -151,6 +151,22 @@ const SISALTO = {
     ]
   },
 
+  // ---------- PELAAJIEN PUOLI ----------
+  // Kevyt salasanalukko pelien tallenteille. Salasanaa ei tallenneta,
+  // vaan siita lasketaan SHA-256-tiiviste. Tyhja tiiviste tai tyhja
+  // videolista piilottaa osion.
+  pelaajaosio: {
+    otsikko: "PLAYERS' AREA",
+    otsikkoSiirto: 90,
+    teksti: "Game recordings for Spirit players. Ask your coach for the password.",
+    nappiTeksti: "ENTER",
+    virheTeksti: "Wrong password — please try again.",
+    salasanaTiiviste: "6e1bd58295f37962db4f0f1631f73a7ab96ca4df95a993af8b3a0f94523ef2f8",
+    videot: [
+
+    ]
+  },
+
   // ---------- UUTISET (NEWS-osio) ----------
   // Tyhja juttulista piilottaa koko osion. Jutun teksti: tyhja rivi = uusi
   // kappale, "## " = valiotsikko, "- " = luettelon kohta.
