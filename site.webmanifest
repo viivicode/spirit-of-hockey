@@ -1,0 +1,12 @@
+{
+  "name": "Spirit of Hockey",
+  "short_name": "Spirit",
+  "icons": [
+    { "src": "icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "icon-512.png", "type": "image/png", "sizes": "512x512" }
+  ],
+  "theme_color": "#0a1834",
+  "background_color": "#040a17",
+  "display": "standalone",
+  "start_url": "/"
+}
