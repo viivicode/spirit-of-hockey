@@ -203,12 +203,12 @@ const SISALTO = {
   // Tyhjä osoite piilottaa osion (tallenteet näkyvät silti, jos niitä on).
   selostus: {
     otsikko: "LIVE COMMENTARY", otsikkoSiirto: 90,
-    osoite: "", tilaOsoite: "https://aani.aiboksi.com/status-json.xsl",
-    teksti: "No commentary for the GrIFK Grankulla game on August 15 — live English commentary by Ian starts from our next game. Watch the video on Leijonat.tv and listen here.",
+    osoite: "https://aani.aiboksi.com/spirit.mp3", tilaOsoite: "https://aani.aiboksi.com/status-json.xsl",
+    teksti: "Live English commentary on Spirit games — watch the video on Leijonat.tv and listen here. The status next to the title shows LIVE when we are on air.",
     nappiTeksti: "LISTEN LIVE", stopTeksti: "STOP",
     liveTeksti: "LIVE", offlineTeksti: "OFFLINE",
     yhdistaaTeksti: "CONNECTING…", eiLahetystaTeksti: "NOT BROADCASTING",
-    laatikkoTeksti: "COMMENTARY STARTS NEXT GAME ›",
+    laatikkoTeksti: "LISTEN TO LIVE COMMENTARY ›",
     tvTeksti: "WATCH ON LEIJONAT.TV ›", tvLinkki: "https://www.leijonat.tv",
     tallenneOtsikko: "PAST GAMES",
     ohjeet: [
