@@ -122,6 +122,7 @@ body{
 
 /* ===== pelaajan oma sivu (avautuu pelaajakortista) ===== */
 .pcard{cursor:pointer;transition:transform .12s}
+.pcard.piilossa{display:none}
 .pcard:hover{transform:translateY(-3px)}
 .pelaaja-kortti-iso{max-width:780px;max-height:88vh;overflow-y:auto}
 /* pelaajan videot (YouTube, myös Shortsit) */
@@ -1370,8 +1371,23 @@ footer{
     if(paneelit) paneelit.classList.remove('ei-pelaajia');
     $('pelaajat-otsikko').textContent = S.pelaajat.otsikko;
     const pl = $('pelaajat-linkki'); pl.textContent = S.pelaajat.linkkiTeksti; pl.href = urli(S.pelaajat.linkki);
-    $('pelaajat-lista').innerHTML = pelaajaParit.map(({p, i: pi}) =>
-      '<div class="pcard" data-i="'+pi+'" title="'+e(p.nimi)+'">'+
+    /* Kerralla nakyvien maara. Oletus 9 = kolme taytta rivia; ilman rajaa
+       kymmenes pelaaja jaa yksin riville ja paneeli nayttaa keskenerailta.
+       Kentan puuttuminen tarkoittaa oletusta, ei rajattomuutta - vanha
+       sisalto saa siis rajan itsestaan. 0 = ei rajaa. Editorissa naytetaan
+       aina kaikki, jotta raahaus ja data-i vastaavat sisallon indekseja. */
+    const NAYTA_OLETUS = 9;
+    const nayta = (() => {
+      const raaka = S.pelaajat.nayta;
+      if(raaka === undefined || raaka === null || String(raaka).trim() === '')
+        return NAYTA_OLETUS;
+      const v = parseInt(raaka, 10);
+      return isFinite(v) && v > 0 ? v : 0;
+    })();
+    const rajattu = !editorissa && nayta > 0 && pelaajaParit.length > nayta;
+    $('pelaajat-lista').innerHTML = pelaajaParit.map(({p, i: pi}, jarj) =>
+      '<div class="pcard'+(rajattu && jarj >= nayta ? ' piilossa' : '')+
+        '" data-i="'+pi+'" title="'+e(p.nimi)+'">'+
         '<span class="num">'+e(p.numero)+'</span>'+
         '<span class="flag-top"><span class="flag '+e(p.lippu)+'"></span></span>'+
         (p.kuva ? '<img class="photo" src="'+e(p.kuva)+'" alt="'+e(p.nimi)+'">' : oletusKuva())+
@@ -1380,6 +1396,23 @@ footer{
           '<div class="pos">'+e(p.pelipaikka)+' • '+e(p.maa)+' <span class="flag '+e(p.lippu)+'"></span></div>'+
         '</div>'+
       '</div>').join('');
+
+    /* VIEW ALL avaa loput. Linkki muuttuu katkaisijaksi vain jos piilotettavaa
+       on - muuten se toimii kuten ennenkin tavallisena linkkina. */
+    pl.onclick = null;
+    if(rajattu){
+      let auki = false;
+      const suljettuTeksti = S.pelaajat.linkkiTeksti;
+      const auki_teksti = String(S.pelaajat.linkkiTeksti2 || '').trim() || 'SHOW LESS';
+      pl.onclick = (ev) => {
+        ev.preventDefault();
+        auki = !auki;
+        document.querySelectorAll('#pelaajat-lista .pcard').forEach((k, j) => {
+          k.classList.toggle('piilossa', !auki && j >= nayta);
+        });
+        pl.textContent = auki ? auki_teksti : suljettuTeksti;
+      };
+    }
   } else {
     if(pelaajaOsio) pelaajaOsio.style.display = 'none';
     if(paneelit) paneelit.classList.add('ei-pelaajia');
