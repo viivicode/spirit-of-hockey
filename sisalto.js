@@ -118,8 +118,8 @@ const SISALTO = {
     otsikko: "                   LATEST VIDEO",
     linkkiTeksti: "ALL VIDEOS ›",
     linkki: "https://www.youtube.com/@SpiritOfHockeyFinland",
-    videoId: "aFXCvLVSyF0",
-    videonOtsikko: "Our First Week on Ice! INSIDE SPIRIT EP.4",
+    videoId: "yFSYaOG0EME",
+    videonOtsikko: "THE START OF PRESEASON WAS CRAZY | Inside Spirit 5",
     kuvaus: "",
     kesto: "7:45"
   },
