@@ -400,7 +400,12 @@ nav.mainnav a.active::after{
 /* schedule */
 .sched{display:flex;flex-direction:column;gap:8px}
 .srow{
-  display:grid;grid-template-columns:52px 26px minmax(0,1fr) 62px 84px;align-items:center;gap:8px;
+  /* Aikasarake on 72 px eika 62 px: "19:00 EEST" tarvitsee 64 px, joten se
+     katkesi kahdelle riville ja teki kesaajan riveista 70 px korkeita talvi-
+     ajan 52 px:n sijaan. Sama lista nayttaa nyt tasakorkealta lapi kauden.
+     Leveys on pois vastustajasarakkeesta (1fr), jossa pisin nimi vie 64 px
+     yli sadan pikselin tilasta. */
+  display:grid;grid-template-columns:52px 26px minmax(0,1fr) 72px 84px;align-items:center;gap:8px;
   background:url("ui-row.png") no-repeat;
   background-size:100% 100%;
   border-radius:10px;
@@ -412,8 +417,23 @@ nav.mainnav a.active::after{
 .srow:hover{filter:brightness(1.18) drop-shadow(0 0 10px rgba(63,140,255,.35))}
 .srow .d{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;color:#cfe0f5}
 .srow .opp{font-weight:700;font-size:13px;letter-spacing:.03em;color:#fff;text-transform:uppercase;line-height:1.2;overflow-wrap:anywhere}
-.srow .t{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:14.5px;color:var(--blue-bright);letter-spacing:.05em}
+.srow .t{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:14.5px;color:var(--blue-bright);letter-spacing:.05em;
+  /* Kello ja vyohyke pysyvat samalla rivilla: rivin korkeus ei saa riippua
+     siita onko kesaaika vai talviaika. */
+  white-space:nowrap}
 .srow .a{font-size:10.5px;font-weight:600;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;text-align:right;line-height:1.25}
+/* Kapea tyopoytavali: kolme paneelia rinnakkain mutta vain ~340 px rivia.
+   Kiinteat sarakkeet (52+26+72+84 + valit) veivat siita niin paljon, etta
+   vastustajan nimelle jai 34 px ja "@ TUTO AK" katkesi kolmelle riville -
+   jolloin rivit olivat eri korkuisia. Kavennetaan kiinteita sarakkeita sen
+   verran etta pisin nimi (64 px) mahtuu yhdelle riville myos 1201 px:ssa.
+   Mitattu tarve: pvm 46, aika 66, halli 51, nimi 64.
+   Tama lohko on perussaannon JALKEEN, koska sama tarkkuus -> myohempi voittaa
+   (sama syy kuin sivun aiemmassa 1201-1380 lohkossa). */
+@media (max-width:1380px) and (min-width:1201px){
+  .srow{grid-template-columns:48px 26px minmax(0,1fr) 72px 58px;gap:6px;
+        padding-left:13px}
+}
 .badge{
   width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:10.5px;color:#fff;
@@ -820,7 +840,7 @@ footer{
   .panel-head{padding:11px 26px 11px 18px;gap:8px}
   .panel-head h3{font-size:17px;letter-spacing:.04em}
   .panel-head a{font-size:11px;letter-spacing:.03em}
-  .srow{grid-template-columns:46px 24px minmax(0,1fr) 58px;
+  .srow{grid-template-columns:46px 24px minmax(0,1fr) 72px;
         padding:11px max(16px, 4.5%) 11px 12px;gap:7px}
   .srow .a{display:none}
   .hero{padding:30px 18px 50px;min-height:auto}
@@ -840,6 +860,21 @@ footer{
 
 /* kapeat puhelimet: pitkät paneeliotsikot (SCHEDULE / RESULTS) tarvitsevat vielä lisää tilaa */
 @media (max-width:420px){
+  /* Ottelurivi: kiinteat sarakkeet kavennetaan viela kerran, jotta pisin
+     vastustajan nimi mahtuu yhdelle riville myos 340 px:n naytolla eivatka
+     rivit ole eri korkuisia. Mitattu 320 px:ssa asti. */
+  /* Paivasarake pysyy 46 px:ssa: "SEP 20" tarvitsee 46 px ja katkesi
+     kahdelle riville 42 px:ssa (mitattu 390 px:n naytolla). */
+  .srow{grid-template-columns:46px 24px minmax(0,1fr) 64px;gap:4px;
+        padding:11px max(16px, 4.5%) 11px 10px}
+  .srow .t{font-size:13.5px}
+  /* Kapeimmilla naytoilla nimi ei katkea kahdelle riville vaan lyhenee
+     kolmella pisteella. Tama on tarkoituksellinen valinta: epatasainen
+     rivilista nayttaa rikkinaiselta, lyhennetty nimi ei - ja saanto pitaa
+     vaikka listaan tulisi myohemmin viela pidempi vastustajan nimi.
+     430 px:sta ylospain tilaa on niin paljon ettei lyhennysta tapahdu. */
+  .srow .opp{font-size:12.5px;white-space:nowrap;overflow:hidden;
+             text-overflow:ellipsis}
   .panel-head{padding:10px 16px 10px 14px;gap:6px}
   .panel-head h3{font-size:clamp(13px,3.9vw,15.5px);letter-spacing:.01em}
   .panel-head a{font-size:clamp(9px,2.7vw,10px);letter-spacing:.01em}
