@@ -652,6 +652,30 @@ table.stand td .team{display:flex;align-items:center;gap:8px;text-transform:uppe
   border-bottom:1px solid rgba(95,176,255,.5);
 }
 .sel-tv:hover{color:#9dd0ff;border-bottom-color:rgba(157,208,255,.8)}
+/* selostajan esittelykortti (kuva + nimi + esittely + linkit) */
+.sel-kortti{display:flex;align-items:center;gap:32px;max-width:880px;margin:10px auto 16px;padding:0 18px}
+.sel-kuva{
+  flex:0 0 auto;width:200px;height:250px;object-fit:cover;border-radius:14px;
+  border:1.5px solid rgba(150,190,240,.45);background:#0e2148;
+  box-shadow:0 10px 26px rgba(0,0,0,.5),0 0 20px rgba(63,140,255,.18);
+}
+.sel-tiedot{flex:1;min-width:0}
+.sel-nimi{
+  font-family:'Saira Condensed',sans-serif;font-size:32px;font-weight:800;line-height:1.1;
+  letter-spacing:.05em;text-transform:uppercase;color:#fff;
+}
+.sel-rooli{
+  font-family:'Saira Condensed',sans-serif;font-size:14px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:#5fb0ff;margin:5px 0 12px;
+}
+.sel-esittely{font-size:15px;line-height:1.75;color:var(--muted);font-weight:500;letter-spacing:.02em;margin:0 0 16px}
+.sel-linkit{display:flex;flex-wrap:wrap;gap:12px 24px}
+@media (max-width:680px){
+  .sel-kortti{flex-direction:column;text-align:center;gap:18px}
+  .sel-kuva{width:168px;height:210px}
+  .sel-nimi{font-size:28px}
+  .sel-linkit{justify-content:center}
+}
 .sel-ohje{
   max-width:620px;margin:16px auto 2px;padding:0 14px 0 34px;
   color:var(--muted);font-size:14px;line-height:1.75;letter-spacing:.02em;
@@ -1060,7 +1084,7 @@ footer{
   </div>
 </section>
 
-<!-- LIVE COMMENTARY (oma äänivirta) -->
+<!-- COMMENTARY: selostajan esittely + (valinnainen) oma äänivirta -->
 <section class="wrap selostusalue" id="commentary" style="display:none">
   <div class="panel metal">
     <div class="panel-head">
@@ -1068,6 +1092,18 @@ footer{
       <span class="sel-tila" id="selostus-tila"></span>
     </div>
     <p class="sel-teksti" id="selostus-teksti" style="display:none"></p>
+    <div class="sel-kortti" id="selostus-kortti" style="display:none">
+      <img class="sel-kuva" id="selostus-kuva" alt="">
+      <div class="sel-tiedot">
+        <div class="sel-nimi" id="selostus-nimi"></div>
+        <div class="sel-rooli" id="selostus-rooli"></div>
+        <p class="sel-esittely" id="selostus-esittely"></p>
+        <div class="sel-linkit">
+          <a class="sel-tv" id="selostus-kortti-tv" target="_blank" rel="noopener" style="display:none"></a>
+          <a class="sel-tv" id="selostus-kotisivu" target="_blank" rel="noopener" style="display:none"></a>
+        </div>
+      </div>
+    </div>
     <div class="sel-ohjaus">
       <button class="sel-nappi" id="selostus-nappi" type="button">
         <span class="merkki" id="selostus-merkki">▶</span><span id="selostus-nappiteksti"></span>
@@ -1637,7 +1673,9 @@ footer{
       const sl = S.selostus || {};
       const virta = String(sl.osoite || '').trim();
       const tallenteet = (sl.tallenteet || []).filter(t => t && t.osoite && t.nimi);
-      if(!virta && !tallenteet.length){
+      /* selostajan esittelykortti näkyy kun nimi tai esittely on annettu */
+      const kortti = !!(String(sl.nimi || '').trim() || String(sl.esittely || '').trim());
+      if(!virta && !tallenteet.length && !kortti){
         sOsio.style.display = 'none';
       } else {
         sOsio.style.display = '';
@@ -1646,14 +1684,35 @@ footer{
         const st = $('selostus-teksti');
         if(sl.teksti){ st.textContent = sl.teksti; st.style.display = ''; } else { st.style.display = 'none'; }
 
+        const kEl = $('selostus-kortti');
+        if(kortti){
+          const kuva = $('selostus-kuva');
+          if(sl.kuva){ kuva.src = sl.kuva; kuva.alt = sl.nimi || ''; kuva.style.display = ''; }
+          else kuva.style.display = 'none';
+          $('selostus-nimi').textContent = sl.nimi || '';
+          $('selostus-rooli').textContent = sl.rooli || '';
+          $('selostus-rooli').style.display = sl.rooli ? '' : 'none';
+          const es = $('selostus-esittely');
+          es.textContent = sl.esittely || ''; es.style.display = sl.esittely ? '' : 'none';
+          const ktv = $('selostus-kortti-tv');
+          if(sl.tvTeksti && sl.tvLinkki){ ktv.textContent = sl.tvTeksti; ktv.href = urli(sl.tvLinkki); ktv.style.display = ''; }
+          else ktv.style.display = 'none';
+          const kk = $('selostus-kotisivu');
+          if(sl.linkkiTeksti && sl.linkki){ kk.textContent = sl.linkkiTeksti; kk.href = urli(sl.linkki); kk.style.display = ''; }
+          else kk.style.display = 'none';
+          kEl.style.display = '';
+        } else kEl.style.display = 'none';
+        /* soitinrivi vain kun oma äänivirta on käytössä, tai ilman korttia katselulinkkiä varten */
+        document.querySelector('#commentary .sel-ohjaus').style.display = (virta || !kortti) ? '' : 'none';
+
         const tv = $('selostus-tv');
-        if(sl.tvTeksti && sl.tvLinkki){
+        if(!kortti && sl.tvTeksti && sl.tvLinkki){
           tv.textContent = sl.tvTeksti; tv.href = urli(sl.tvLinkki); tv.style.display = '';
         } else { tv.style.display = 'none'; }
 
         const ohjeet = (sl.ohjeet || []).map(o => String((o && o.teksti) || '').trim()).filter(Boolean);
         $('selostus-ohje').innerHTML = ohjeet.map(o => '<li>'+e(o)+'</li>').join('');
-        $('selostus-ohje').style.display = ohjeet.length ? '' : 'none';
+        $('selostus-ohje').style.display = (virta && ohjeet.length) ? '' : 'none';
 
         const tEl = $('selostus-tallenteet');
         if(tallenteet.length){
