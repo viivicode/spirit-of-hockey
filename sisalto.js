@@ -116,16 +116,16 @@ const SISALTO = {
     linkki: "#standings",
     logoKoko: 100,  // oman rivin logopallukan koko pikseleinä (20–120)
     joukkueet: [
-      { sija: 1, lyhenne: "TPS", vari1: "#2b2b2b", vari2: "#0a0a0a", nimi: "TPS Ak", o: 2, v: 2, h: 0, jv: 0, p: 4, oma: false },
-      { sija: 2, lyhenne: "ROC", vari1: "#e8791f", vari2: "#2a1405", nimi: "Rockets", o: 2, v: 2, h: 0, jv: 0, p: 4, oma: false },
-      { sija: 3, lyhenne: "FOP", vari1: "#e8791f", vari2: "#2a1405", nimi: "FoPS", o: 1, v: 1, h: 0, jv: 0, p: 2, oma: false },
-      { sija: 4, lyhenne: "RNK", vari1: "#f0c419", vari2: "#4a3c05", nimi: "RNK", o: 2, v: 1, h: 1, jv: 0, p: 2, oma: false },
-      { sija: 5, lyhenne: "LÄK", vari1: "#d0202e", vari2: "#4a0a10", nimi: "LäKi", o: 1, v: 1, h: 0, jv: 0, p: 2, oma: false },
-      { sija: 6, lyhenne: "TUT", vari1: "#d0202e", vari2: "#4a0a10", nimi: "TuTo Ak", o: 1, v: 1, h: 0, jv: 0, p: 2, oma: false },
-      { sija: 7, lyhenne: "VG", vari1: "#f2c200", vari2: "#4a3a00", nimi: "VG-62", o: 1, v: 0, h: 1, jv: 0, p: 0, oma: false },
-      { sija: 8, lyhenne: "KUK", vari1: "#e8791f", vari2: "#2a1405", nimi: "KuKi", o: 2, v: 0, h: 2, jv: 0, p: 0, oma: false },
-      { sija: 9, lyhenne: "JYS", vari1: "#2b5cb8", vari2: "#0e1f44", nimi: "Jyske", o: 2, v: 0, h: 2, jv: 0, p: 0, oma: false },
-      { sija: 10, lyhenne: "SPI", vari1: "#e8eef5", vari2: "#8fa0b8", nimi: "Spirit of Hockey", o: 2, v: 0, h: 2, jv: 0, p: 0, oma: true }
+      { sija: 1, lyhenne: "FOP", vari1: "#e8791f", vari2: "#2a1405", nimi: "FoPS", o: 2, v: 2, h: 0, jv: 0, p: 4, oma: false },
+      { sija: 2, lyhenne: "TPS", vari1: "#2b2b2b", vari2: "#0a0a0a", nimi: "TPS Ak", o: 2, v: 2, h: 0, jv: 0, p: 4, oma: false },
+      { sija: 3, lyhenne: "ROC", vari1: "#e8791f", vari2: "#2a1405", nimi: "Rockets", o: 2, v: 2, h: 0, jv: 0, p: 4, oma: false },
+      { sija: 4, lyhenne: "LÄK", vari1: "#d0202e", vari2: "#4a0a10", nimi: "LäKi", o: 2, v: 2, h: 0, jv: 0, p: 4, oma: false },
+      { sija: 5, lyhenne: "RNK", vari1: "#f0c419", vari2: "#4a3c05", nimi: "RNK", o: 2, v: 1, h: 1, jv: 0, p: 2, oma: false },
+      { sija: 6, lyhenne: "TUT", vari1: "#d0202e", vari2: "#4a0a10", nimi: "TuTo Ak", o: 2, v: 1, h: 1, jv: 0, p: 2, oma: false },
+      { sija: 7, lyhenne: "KUK", vari1: "#e8791f", vari2: "#2a1405", nimi: "KuKi", o: 3, v: 1, h: 2, jv: 0, p: 2, oma: false },
+      { sija: 8, lyhenne: "SPI", vari1: "#e8eef5", vari2: "#8fa0b8", nimi: "Spirit of Hockey", o: 2, v: 0, h: 2, jv: 0, p: 0, oma: true },
+      { sija: 9, lyhenne: "VG", vari1: "#f2c200", vari2: "#4a3a00", nimi: "VG-62", o: 2, v: 0, h: 2, jv: 0, p: 0, oma: false },
+      { sija: 10, lyhenne: "JYS", vari1: "#2b5cb8", vari2: "#0e1f44", nimi: "Jyske", o: 3, v: 0, h: 3, jv: 0, p: 0, oma: false }
     ]
   },
 
