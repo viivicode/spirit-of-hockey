@@ -116,9 +116,9 @@ const SISALTO = {
     linkki: "#standings",
     logoKoko: 100,  // oman rivin logopallukan koko pikseleinä (20–120)
     joukkueet: [
-      { sija: 1, lyhenne: "FOP", vari1: "#e8791f", vari2: "#2a1405", nimi: "FoPS", o: 3, v: 3, h: 0, jv: 0, p: 6, oma: false },
-      { sija: 2, lyhenne: "TPS", vari1: "#2b2b2b", vari2: "#0a0a0a", nimi: "TPS Ak", o: 3, v: 3, h: 0, jv: 0, p: 6, oma: false },
-      { sija: 3, lyhenne: "ROC", vari1: "#e8791f", vari2: "#2a1405", nimi: "Rockets", o: 3, v: 2, h: 0, jv: 0, p: 5, oma: false },
+      { sija: 1, lyhenne: "TPS", vari1: "#2b2b2b", vari2: "#0a0a0a", nimi: "TPS Ak", o: 4, v: 4, h: 0, jv: 0, p: 8, oma: false },
+      { sija: 2, lyhenne: "FOP", vari1: "#e8791f", vari2: "#2a1405", nimi: "FoPS", o: 3, v: 3, h: 0, jv: 0, p: 6, oma: false },
+      { sija: 3, lyhenne: "ROC", vari1: "#e8791f", vari2: "#2a1405", nimi: "Rockets", o: 4, v: 2, h: 1, jv: 0, p: 5, oma: false },
       { sija: 4, lyhenne: "RNK", vari1: "#f0c419", vari2: "#4a3c05", nimi: "RNK", o: 3, v: 2, h: 1, jv: 0, p: 4, oma: false },
       { sija: 5, lyhenne: "LÄK", vari1: "#d0202e", vari2: "#4a0a10", nimi: "LäKi", o: 2, v: 2, h: 0, jv: 0, p: 4, oma: false },
       { sija: 6, lyhenne: "TUT", vari1: "#d0202e", vari2: "#4a0a10", nimi: "TuTo Ak", o: 3, v: 1, h: 2, jv: 0, p: 2, oma: false },
