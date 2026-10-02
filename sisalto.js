@@ -121,11 +121,11 @@ const SISALTO = {
       { sija: 3, lyhenne: "ROC", vari1: "#e8791f", vari2: "#2a1405", nimi: "Rockets", o: 4, v: 2, h: 1, jv: 0, p: 5, oma: false },
       { sija: 4, lyhenne: "RNK", vari1: "#f0c419", vari2: "#4a3c05", nimi: "RNK", o: 3, v: 2, h: 1, jv: 0, p: 4, oma: false },
       { sija: 5, lyhenne: "LÄK", vari1: "#d0202e", vari2: "#4a0a10", nimi: "LäKi", o: 2, v: 2, h: 0, jv: 0, p: 4, oma: false },
-      { sija: 6, lyhenne: "TUT", vari1: "#d0202e", vari2: "#4a0a10", nimi: "TuTo Ak", o: 3, v: 1, h: 2, jv: 0, p: 2, oma: false },
-      { sija: 7, lyhenne: "KUK", vari1: "#e8791f", vari2: "#2a1405", nimi: "KuKi", o: 3, v: 1, h: 2, jv: 0, p: 2, oma: false },
+      { sija: 6, lyhenne: "KUK", vari1: "#e8791f", vari2: "#2a1405", nimi: "KuKi", o: 4, v: 2, h: 2, jv: 0, p: 4, oma: false },
+      { sija: 7, lyhenne: "TUT", vari1: "#d0202e", vari2: "#4a0a10", nimi: "TuTo Ak", o: 3, v: 1, h: 2, jv: 0, p: 2, oma: false },
       { sija: 8, lyhenne: "VG", vari1: "#f2c200", vari2: "#4a3a00", nimi: "VG-62", o: 3, v: 0, h: 2, jv: 0, p: 1, oma: false },
       { sija: 9, lyhenne: "SPI", vari1: "#e8eef5", vari2: "#8fa0b8", nimi: "Spirit of Hockey", o: 3, v: 0, h: 3, jv: 0, p: 0, oma: true },
-      { sija: 10, lyhenne: "JYS", vari1: "#2b5cb8", vari2: "#0e1f44", nimi: "Jyske", o: 4, v: 0, h: 4, jv: 0, p: 0, oma: false }
+      { sija: 10, lyhenne: "JYS", vari1: "#2b5cb8", vari2: "#0e1f44", nimi: "Jyske", o: 5, v: 0, h: 5, jv: 0, p: 0, oma: false }
     ]
   },
 
