@@ -1116,6 +1116,7 @@ footer{
         <div class="sel-linkit">
           <a class="sel-tv" id="selostus-kortti-tv" target="_blank" rel="noopener" style="display:none"></a>
           <a class="sel-tv" id="selostus-sposti" style="display:none"></a>
+          <a class="sel-tv" id="selostus-esite" target="_blank" rel="noopener" style="display:none"></a>
           <a class="sel-tv" id="selostus-kotisivu" target="_blank" rel="noopener" style="display:none"></a>
         </div>
       </div>
@@ -1725,6 +1726,15 @@ footer{
             $('selostus-tarjous-teksti').textContent = sl.tarjousTeksti;
             tar.style.display = '';
           } else tar.style.display = 'none';
+          /* Esite on sivuston oma tiedosto (pdf), joten osoitetta ei ajeta
+             urli()n lapi: se lisaisi suhteellisen polun eteen https-alun. */
+          const esite = $('selostus-esite');
+          const epol = String(sl.esite || '').trim();
+          if(epol && sl.esiteTeksti){
+            esite.textContent = sl.esiteTeksti;
+            esite.href = /^https?:/i.test(epol) ? urli(epol) : epol;
+            esite.style.display = '';
+          } else esite.style.display = 'none';
           const sp = $('selostus-sposti');
           const osoite = String(sl.sposti || '').trim();
           if(osoite){
