@@ -670,11 +670,22 @@ table.stand td .team{display:flex;align-items:center;gap:8px;text-transform:uppe
 }
 .sel-esittely{font-size:15px;line-height:1.75;color:var(--muted);font-weight:500;letter-spacing:.02em;margin:0 0 16px}
 .sel-linkit{display:flex;flex-wrap:wrap;gap:12px 24px}
+/* palvelutarjous: selostaja on vapaana myös muille seuroille */
+.sel-tarjous{
+  margin:0 0 16px;padding:12px 16px;border-radius:12px;
+  border:1px solid rgba(120,160,215,.35);background:rgba(10,26,58,.55);
+}
+.sel-tarjous .ots{
+  font-family:'Saira Condensed',sans-serif;font-size:12.5px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:#5fb0ff;margin-bottom:5px;
+}
+.sel-tarjous p{font-size:14px;line-height:1.65;color:var(--muted);font-weight:500;letter-spacing:.02em;margin:0}
 @media (max-width:680px){
   .sel-kortti{flex-direction:column;text-align:center;gap:18px}
   .sel-kuva{width:168px;height:210px}
   .sel-nimi{font-size:28px}
   .sel-linkit{justify-content:center}
+  .sel-tarjous{text-align:left}
 }
 .sel-ohje{
   max-width:620px;margin:16px auto 2px;padding:0 14px 0 34px;
@@ -1098,8 +1109,13 @@ footer{
         <div class="sel-nimi" id="selostus-nimi"></div>
         <div class="sel-rooli" id="selostus-rooli"></div>
         <p class="sel-esittely" id="selostus-esittely"></p>
+        <div class="sel-tarjous" id="selostus-tarjous" style="display:none">
+          <div class="ots" id="selostus-tarjous-otsikko"></div>
+          <p id="selostus-tarjous-teksti"></p>
+        </div>
         <div class="sel-linkit">
           <a class="sel-tv" id="selostus-kortti-tv" target="_blank" rel="noopener" style="display:none"></a>
+          <a class="sel-tv" id="selostus-sposti" style="display:none"></a>
           <a class="sel-tv" id="selostus-kotisivu" target="_blank" rel="noopener" style="display:none"></a>
         </div>
       </div>
@@ -1700,6 +1716,23 @@ footer{
           const kk = $('selostus-kotisivu');
           if(sl.linkkiTeksti && sl.linkki){ kk.textContent = sl.linkkiTeksti; kk.href = urli(sl.linkki); kk.style.display = ''; }
           else kk.style.display = 'none';
+          /* Palvelutarjous muille seuroille. Tyhjä teksti piilottaa laatikon,
+             tyhjä sähköposti pelkän linkin - kumpikin erikseen. */
+          const tar = $('selostus-tarjous');
+          if(sl.tarjousTeksti){
+            $('selostus-tarjous-otsikko').textContent = sl.tarjousOtsikko || '';
+            $('selostus-tarjous-otsikko').style.display = sl.tarjousOtsikko ? '' : 'none';
+            $('selostus-tarjous-teksti').textContent = sl.tarjousTeksti;
+            tar.style.display = '';
+          } else tar.style.display = 'none';
+          const sp = $('selostus-sposti');
+          const osoite = String(sl.sposti || '').trim();
+          if(osoite){
+            sp.textContent = sl.spostiTeksti || osoite;
+            /* mailto ei kulje urli()n läpi: se lisäisi https-alkuun */
+            sp.href = 'mailto:' + osoite;
+            sp.style.display = '';
+          } else sp.style.display = 'none';
           kEl.style.display = '';
         } else kEl.style.display = 'none';
         /* soitinrivi vain kun oma äänivirta on käytössä, tai ilman korttia katselulinkkiä varten */
