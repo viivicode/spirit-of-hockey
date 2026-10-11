@@ -680,12 +680,20 @@ table.stand td .team{display:flex;align-items:center;gap:8px;text-transform:uppe
   letter-spacing:.14em;text-transform:uppercase;color:#5fb0ff;margin-bottom:5px;
 }
 .sel-tarjous p{font-size:14px;line-height:1.65;color:var(--muted);font-weight:500;letter-spacing:.02em;margin:0}
+/* seuran oma suositus: lainaus erottuu tarjouslaatikosta viivalla, ei laatikolla */
+.sel-suositus{margin:0 0 16px;padding:2px 0 2px 16px;border-left:2px solid #3f8cff}
+.sel-suositus p{font-size:14.5px;line-height:1.7;color:#dbe6f3;font-style:italic;letter-spacing:.02em;margin:0}
+.sel-suositus .kuka{
+  font-family:'Saira Condensed',sans-serif;font-size:12.5px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:7px;
+}
 @media (max-width:680px){
   .sel-kortti{flex-direction:column;text-align:center;gap:18px}
   .sel-kuva{width:168px;height:210px}
   .sel-nimi{font-size:28px}
   .sel-linkit{justify-content:center}
   .sel-tarjous{text-align:left}
+  .sel-suositus{text-align:left}
 }
 .sel-ohje{
   max-width:620px;margin:16px auto 2px;padding:0 14px 0 34px;
@@ -1113,6 +1121,10 @@ footer{
           <div class="ots" id="selostus-tarjous-otsikko"></div>
           <p id="selostus-tarjous-teksti"></p>
         </div>
+        <blockquote class="sel-suositus" id="selostus-suositus" style="display:none">
+          <p id="selostus-suositus-teksti"></p>
+          <div class="kuka" id="selostus-suositus-kuka"></div>
+        </blockquote>
         <div class="sel-linkit">
           <a class="sel-tv" id="selostus-kortti-tv" target="_blank" rel="noopener" style="display:none"></a>
           <a class="sel-tv" id="selostus-sposti" style="display:none"></a>
@@ -1726,6 +1738,16 @@ footer{
             $('selostus-tarjous-teksti').textContent = sl.tarjousTeksti;
             tar.style.display = '';
           } else tar.style.display = 'none';
+          /* Seuran oma suositus. Tyhjä teksti piilottaa koko lainauksen -
+             allekirjoitus yksin ei kerro mitään. */
+          const suos = $('selostus-suositus');
+          if(sl.suositus){
+            $('selostus-suositus-teksti').textContent = '\u201c' + sl.suositus + '\u201d';
+            const kuka = $('selostus-suositus-kuka');
+            kuka.textContent = sl.suositusKuka || '';
+            kuka.style.display = sl.suositusKuka ? '' : 'none';
+            suos.style.display = '';
+          } else suos.style.display = 'none';
           /* Esite on sivuston oma tiedosto (pdf), joten osoitetta ei ajeta
              urli()n lapi: se lisaisi suhteellisen polun eteen https-alun. */
           const esite = $('selostus-esite');
