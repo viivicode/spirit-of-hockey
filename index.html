@@ -423,8 +423,20 @@ nav.mainnav a.active::after{
   padding:10px max(24px, 4.5%) 16px 18px;
 }
 .srow:hover{filter:brightness(1.18) drop-shadow(0 0 10px rgba(63,140,255,.35))}
-.srow .d{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;color:#cfe0f5}
-.srow .opp{font-weight:700;font-size:13px;letter-spacing:.03em;color:#fff;text-transform:uppercase;line-height:1.2;overflow-wrap:anywhere}
+.srow .d{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;color:#cfe0f5;
+  /* Paivays pysyy yhdella rivilla. Levein kuukausi on MAR (48 px);
+     46 px:n sarakkeessa "MAR 07" katkesi kahdelle riville ja teki
+     siita rivista 70 px korkean muiden ollessa 46 px. Sarakkeet ovat
+     siksi 50 px kaikissa ladonnoissa. */
+  white-space:nowrap}
+.srow .opp{font-weight:700;font-size:13px;letter-spacing:.03em;color:#fff;text-transform:uppercase;line-height:1.2;
+  /* Nimi ei katkea kahdelle riville missaan ladonnassa vaan lyhenee
+     kolmella pisteella: epatasainen ottelulista nayttaa rikkinaiselta,
+     lyhennetty nimi ei. Aiemmin tama saanto oli vain <=420 px:n
+     puhelimilla, ja tyopoydalla "TAPPARA AKATEMIA" katkesi kahdelle
+     riville (122 px:n sarake). Pitkat nimet lyhennetaan lisaksi jo
+     paivita_sarja.py:ssa, jotta pisteita ei tarvita. */
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .srow .t{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:14.5px;color:var(--blue-bright);letter-spacing:.05em;
   /* Kello ja vyohyke pysyvat samalla rivilla: rivin korkeus ei saa riippua
      siita onko kesaaika vai talviaika. */
@@ -439,7 +451,7 @@ nav.mainnav a.active::after{
    Tama lohko on perussaannon JALKEEN, koska sama tarkkuus -> myohempi voittaa
    (sama syy kuin sivun aiemmassa 1201-1380 lohkossa). */
 @media (max-width:1380px) and (min-width:1201px){
-  .srow{grid-template-columns:48px 26px minmax(0,1fr) 72px 58px;gap:6px;
+  .srow{grid-template-columns:50px 26px minmax(0,1fr) 72px 58px;gap:6px;
         padding-left:13px}
 }
 .badge{
@@ -901,7 +913,7 @@ footer{
   .panel-head h3{font-size:17px;letter-spacing:.04em}
   .panel-head a{font-size:11px;letter-spacing:.03em}
   /* Sama epäsymmetria kuin leveässä: palkki on taustakuvan yläosassa. */
-  .srow{grid-template-columns:46px 24px minmax(0,1fr) 72px;
+  .srow{grid-template-columns:50px 24px minmax(0,1fr) 72px;
         padding:8px max(16px, 4.5%) 14px 12px;gap:7px}
   .srow .a{display:none}
   .hero{padding:30px 18px 50px;min-height:auto}
@@ -924,15 +936,19 @@ footer{
   /* Ottelurivi: kiinteat sarakkeet kavennetaan viela kerran, jotta pisin
      vastustajan nimi mahtuu yhdelle riville myos 340 px:n naytolla eivatka
      rivit ole eri korkuisia. Mitattu 320 px:ssa asti. */
-  /* Paivasarake pysyy 46 px:ssa: "SEP 20" tarvitsee 46 px ja katkesi
-     kahdelle riville 42 px:ssa (mitattu 390 px:n naytolla). */
-  .srow{grid-template-columns:46px 24px minmax(0,1fr) 64px;gap:5px;
+  /* Paivasarake on 50 px: levein kuukausi "MAR 07" tarvitsee 48 px
+     (mitattu Saira Condensedilla); 46 px:ssa se katkesi kahdelle riville. */
+  .srow{grid-template-columns:50px 24px minmax(0,1fr) 64px;gap:5px;
         padding:8px max(16px, 4.5%) 14px 10px}
   /* Logopallukka piirretaan muualla 34 px:na ja vedetaan miinusmarginaalilla
      26 px:n ruutuun. Kapeimmassa ladonnassa ruutu on 24 px ja vali 5 px,
      jolloin 34 px:n kuva ylsi nimen paalle. 30 px / -3 px jattaa saman
      2 px:n valin kuin leveammissa ladonnoissa. */
   .srow .badge.badge-kuva{width:30px;height:30px;margin:-3px}
+  /* Logoton joukkue saa kirjainpallukan. Sen on vietava pystysuunnassa
+     SAMA 24 px kuin yllä rajatun logon (30 px - 2x3 px miinusmarginaali),
+     muuten logoton rivi on 2 px muita korkeampi. */
+  .srow .badge{width:24px;height:24px;font-size:9.5px}
   .srow .t{font-size:13.5px}
   /* Kapeimmilla naytoilla nimi ei katkea kahdelle riville vaan lyhenee
      kolmella pisteella. Tama on tarkoituksellinen valinta: epatasainen
